@@ -1,17 +1,16 @@
 import {StyleSheet} from 'react-native';
-import fonts from '../../Assets/fonts';
-import {appShadow, colors} from '../../Utils/theme';
-import {fontSizes, vh, vw} from '../../Utils/units';
+import {vh, vw} from '../../themes/units';
+import {Fonts} from '../../themes';
+import {APP_SHADOW, Colors} from '../../themes/Colors';
 
 const styles = StyleSheet.create({
   container: {
     marginVertical: vh * 1.5,
   },
   titleText: {
-    fontSize: fontSizes.f14,
+    ...Fonts.Regular(14, Colors.BLACK),
     // fontSize: vw * 4,
     marginLeft: vw * 4,
-    color: colors.black,
     marginBottom: vh * 1,
   },
   textInputContainer: {
@@ -21,8 +20,8 @@ const styles = StyleSheet.create({
     borderRadius: vw * 2,
     justifyContent: 'center',
     paddingHorizontal: vw * 4,
-    backgroundColor: colors.white,
-    ...appShadow
+    backgroundColor: Colors.WHITE,
+    ...APP_SHADOW,
   },
 
   iconContainer: {
@@ -37,15 +36,9 @@ const styles = StyleSheet.create({
     width: vw * 4,
   },
   textInput: {
-    fontSize: fontSizes.f12,
-    color: colors.grayColor,
-    fontWeight: fonts.Mont.Regular,
+    ...Fonts.Regular(12, Colors.PLACE_HOLDER),
     marginTop: vw,
     // backgroundColor: 'red',
-  },
-
-  starStyle: {
-    color: colors.lightRed,
   },
 });
 

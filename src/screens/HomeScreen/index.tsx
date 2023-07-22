@@ -3,9 +3,9 @@ import {View, Image, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import styles from './styles';
-import InputField from '../../Components/InputField';
 import {TouchableInput} from '../../components/TouchableInput';
 import GeneralButton from '../../components/GeneralButton';
+import InputField from '../../components/InputField';
 
 type Props = {
   navigation: any;
@@ -22,7 +22,6 @@ const Home = (props: Props) => {
   const [isDate, setIsDate] = useState(false);
   const generalModalRef = useRef<any>();
   const setStatusRef = useRef<any>();
-  let formatDate = dayjs(date).format('DD-MM-YYYY');
 
   const handleOnAccept = () => {
     if (taskDetail) {
@@ -51,7 +50,7 @@ const Home = (props: Props) => {
             onPress={() => setStatusRef?.current.show()}
           />
         )}
-        <TouchableInput
+        {/* <TouchableInput
           title="Deadline"
           placeholder="Select Deadline"
           value={
@@ -62,7 +61,7 @@ const Home = (props: Props) => {
               : null
           }
           onPress={() => setOpen(true)}
-        />
+        /> */}
         <InputField
           title="Description"
           placeholder="Enter Description"
@@ -90,17 +89,6 @@ const Home = (props: Props) => {
         showsVerticalScrollIndicator={false}>
         {renderFields()}
       </KeyboardAwareScrollView>
-      <ResponsePopup
-        reference={generalModalRef}
-        title={'Task Added'}
-        subTitle={
-          taskDetail
-            ? 'Your Task Has Been Updated Successfully!'
-            : 'Your Task Has Been Added Successfully!'
-        }
-        primaryTitle={'OK'}
-        onAccept={handleOnAccept}
-      />
       <DatePicker
         modal
         mode={'date'}
@@ -116,7 +104,6 @@ const Home = (props: Props) => {
           setOpen(false);
         }}
       />
-      <ChangeStatusPopup ref={setStatusRef} setStatus={setStatus} />
     </View>
   );
 };

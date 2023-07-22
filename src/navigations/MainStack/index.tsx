@@ -10,7 +10,7 @@ const MainNavigator = () => {
       screenOptions={{headerShown: false}}
       initialRouteName={'DrawerNavigator'}>
       <RootStack.Screen
-        name="DrawerNavigator"
+        name={'DrawerNavigator'}
         component={DrawerNavigator}
         options={{headerShown: false}}
       />

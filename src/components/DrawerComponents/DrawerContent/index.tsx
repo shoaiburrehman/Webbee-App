@@ -4,18 +4,7 @@ import DrawerButton from '../DrawerButton';
 import {View} from 'react-native';
 import {drawerRoutes} from '../../../navigations/NavigationOptions';
 
-const routeOrders = [
-  'HomeStack',
-  'BookStack',
-  'ServicesStack',
-  'DumpRequestStack',
-  'PaymentStack',
-  'AboutStack',
-  'TermsStack',
-  'ContactStack',
-  'ProfileStack',
-  'ChatStack',
-];
+const routeOrders = ['Home'];
 
 const DrawerContent = props => {
   const handleOnDrawerItemPress = routeName => {

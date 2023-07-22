@@ -1,19 +1,19 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../utils/theme';
-import {vh, vw} from '../../../utils/units';
+import {vh, vw} from '../../../themes/units';
+import {APP_PRIMARY_COLOR, Colors} from '../../../themes/Colors';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: colors.white,
+    backgroundColor: Colors.PLACE_HOLDER,
   },
   routeContainer: {
-    marginTop: 3 * vh,
+    marginTop: 8 * vh,
     marginLeft: vw * 10,
   },
   name: {
     fontSize: 2.3 * vh,
-    color: colors.defaultHeaderColor,
+    color: APP_PRIMARY_COLOR,
     marginLeft: 5 * vw,
     width: vw * 30,
   },
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
   label: {
     fontSize: 2 * vh,
-    color: colors.defaultPlaceHolder,
+    color: Colors.PLACE_HOLDER,
     marginLeft: 2 * vw,
   },
 

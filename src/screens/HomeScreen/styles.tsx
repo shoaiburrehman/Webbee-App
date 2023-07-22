@@ -1,8 +1,7 @@
-import {
-  StyleSheet,
-} from 'react-native';
-import { colors } from '../../Utils/theme';
-import { fontSizes, vh, vw } from '../../Utils/units';
+import {StyleSheet} from 'react-native';
+import {vh, vw} from '../../themes/units';
+import {Fonts} from '../../themes';
+import {Colors} from '../../themes/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,13 +21,12 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.themeColor
   },
   btnText: {
-      fontSize: fontSizes.f14,
-      textAlign: "center",
-      color: colors.white,
+    ...Fonts.Regular(14, Colors.WHITE),
+    textAlign: 'center',
   },
-  fieldsView:{
+  fieldsView: {
     marginHorizontal: vw * 7,
-    marginVertical: 3 * vh
+    marginVertical: 3 * vh,
   },
   textInputStyle: {
     height: vh * 17,

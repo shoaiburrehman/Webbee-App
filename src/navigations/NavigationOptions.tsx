@@ -37,21 +37,19 @@ const getTitle = props => {
 };
 
 export const drawerRoutes = {
-  HomeStack: {
+  Home: {
     label: 'Home',
   },
 };
 
 const renderHeaderLeft = props => {
-  if (props?.route?.name == 'Home') {
-    return (
-      <TouchableOpacity
-        onPress={() => props?.navigation.toggleDrawer()}
-        style={styles.textButton}>
-        <Image source={icons.drawer} style={styles.searchIconStyle} />
-      </TouchableOpacity>
-    );
-  }
+  return (
+    <TouchableOpacity
+      onPress={() => props?.navigation.toggleDrawer()}
+      style={styles.textButton}>
+      <Image source={icons.drawer} style={styles.searchIconStyle} />
+    </TouchableOpacity>
+  );
 };
 
 export default navigationOptions;

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 2 * vh,
-    color: Colors.PLACE_HOLDER,
+    color: Colors.WHITE,
     marginLeft: 3.5 * vw,
   },
 

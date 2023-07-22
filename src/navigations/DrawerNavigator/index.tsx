@@ -1,7 +1,9 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from '../../components/DrawerComponents/DrawerContent';
-import NotificationStack from '../NotificationStack';
+import HomeStack from '../HomeStack/HomeStack';
+import navigationOptions from '../NavigationOptions';
+import NavigationRoutes from '../NavigationRoutes';
 
 const Drawer = createDrawerNavigator();
 
@@ -13,7 +15,7 @@ const DrawerNavigator = props => {
         headerShown: false,
         drawerStyle: {
           backgroundColor: 'transparent',
-          width: '55%',
+          width: '60%',
         },
         overlayColor: 'transparent',
         sceneContainerStyle: {
@@ -21,7 +23,7 @@ const DrawerNavigator = props => {
         },
       }}
       drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="NotificationStack" component={NotificationStack} />
+      <Drawer.Screen name={NavigationRoutes.HOME_STACK} component={HomeStack} />
     </Drawer.Navigator>
   );
 };
