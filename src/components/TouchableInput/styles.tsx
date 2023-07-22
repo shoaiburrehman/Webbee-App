@@ -39,8 +39,4 @@ export const styles = StyleSheet.create({
     ...Fonts.Regular(12, Colors.PLACE_HOLDER),
     marginTop: vw,
   },
-
-  starStyle: {
-    color: colors.lightRed,
-  },
 });

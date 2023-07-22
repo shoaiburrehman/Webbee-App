@@ -4,7 +4,7 @@ import DrawerButton from '../DrawerButton';
 import {View} from 'react-native';
 import {drawerRoutes} from '../../../navigations/NavigationOptions';
 
-const routeOrders = ['Home'];
+const routeOrders = ['Dashboard', 'Manage Categories'];
 
 const DrawerContent = props => {
   const handleOnDrawerItemPress = routeName => {

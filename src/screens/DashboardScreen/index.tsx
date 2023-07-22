@@ -12,7 +12,7 @@ type Props = {
   route: any;
 };
 
-const Home = (props: Props) => {
+const DashboardScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
   const [title, setTitle] = useState(taskDetail?.title || '');
   const [description, setDescription] = useState(taskDetail?.description || '');
@@ -108,4 +108,4 @@ const Home = (props: Props) => {
   );
 };
 
-export default Home;
+export default DashboardScreen;

@@ -1,12 +1,12 @@
 import React, {useRef} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import DashboardScreen from '../../screens/DashboardScreen';
 import NavigationRoutes from '../NavigationRoutes';
 import navigationOptions from '../NavigationOptions';
+import ManageCategoriesScreen from '../../screens/ManageCategoriesScreen';
 
 const Stack = createStackNavigator();
 
-const HomeStack: React.FC = () => {
+const ManageCategoriesStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -14,12 +14,12 @@ const HomeStack: React.FC = () => {
         animation: 'slide_from_right',
       }}>
       <Stack.Screen
-        name={NavigationRoutes.DASHBOARD}
-        component={DashboardScreen}
+        name={NavigationRoutes.MANAGE_CATEGORY}
+        component={ManageCategoriesScreen}
         options={navigationOptions}
       />
     </Stack.Navigator>
   );
 };
 
-export default HomeStack;
+export default ManageCategoriesStack;

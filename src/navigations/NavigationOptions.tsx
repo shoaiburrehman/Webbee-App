@@ -37,8 +37,11 @@ const getTitle = props => {
 };
 
 export const drawerRoutes = {
-  Home: {
-    label: 'Home',
+  Dashboard: {
+    label: 'Dashboard',
+  },
+  'Manage Categories': {
+    label: 'Manage Categories',
   },
 };
 
