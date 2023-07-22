@@ -50,6 +50,18 @@ export const Colors = {
   PLACE_HOLDER: '#666666',
 };
 
+export const APP_SHADOW = {
+  shadowColor: '#000000',
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.3,
+  shadowRadius: 4.65,
+
+  elevation: 8,
+};
+
 export const TOAST_COLORS = {
   success: 'green',
   error: 'red',
