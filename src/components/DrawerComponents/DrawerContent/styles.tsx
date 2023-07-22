@@ -5,7 +5,7 @@ import {APP_PRIMARY_COLOR, Colors} from '../../../themes/Colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.PLACE_HOLDER,
+    backgroundColor: Colors.PRIMARY_COLOR,
   },
   routeContainer: {
     marginTop: 8 * vh,

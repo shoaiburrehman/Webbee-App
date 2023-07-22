@@ -20,7 +20,7 @@ const navigationOptions = navProps => {
 const getHeaderStyle = props => {
   return {
     shadowColor: 'transparent',
-    backgroundColor: Colors.PLACE_HOLDER,
+    backgroundColor: Colors.PRIMARY_COLOR,
     height: 15 * vh,
     maxHeight: 20 * vh,
     borderBottomLeftRadius: 8 * vw,

@@ -30,6 +30,7 @@ export const Colors = {
   LIGHT_DARK_SHADOW: 'rgba(0,0,0,0.3)',
 
   /* App Colors */
+  PRIMARY_COLOR: '#009387',
   PINK: '#EA388F',
   DARKBLUE: '#010826',
   OXFORDBLUE: '#0E145A',
