@@ -39,20 +39,12 @@ const ManageCategoriesScreen = (props: Props) => {
     return (
       <View style={styles.fieldsView}>
         <InputField
-          title="Title"
-          placeholder="Enter Title"
+          title="Category Name"
+          placeholder="Enter Category Name"
           value={title}
           onChangeText={setTitle}
         />
-        {taskDetail && (
-          <TouchableInput
-            title="Status"
-            placeholder="Select Status"
-            value={status ? status : 'Select Status'}
-            onPress={() => setStatusRef?.current.show()}
-          />
-        )}
-        <TouchableInput
+        {/* <TouchableInput
           title="Deadline"
           placeholder="Select Deadline"
           value={
@@ -63,22 +55,42 @@ const ManageCategoriesScreen = (props: Props) => {
               : null
           }
           onPress={() => setOpen(true)}
-        />
+        /> */}
         <InputField
-          title="Description"
-          placeholder="Enter Description"
-          multiline={true}
+          title="Field"
+          placeholder="Enter Field"
           textAlignVertical="top"
-          textInputStyle={styles.textInputStyle}
           value={description}
+          fieldType={'string'}
+          icon={true}
           onChangeText={setDescription}
         />
-
-        <GeneralButton
-          text={taskDetail ? 'Edit Task' : 'Add Task'}
-          style={[styles.btn]}
-          textStyle={styles.btnText}
-          // onPress={handleCreate}
+        <InputField
+          title="Field"
+          placeholder="Enter Field"
+          textAlignVertical="top"
+          value={description}
+          fieldType={'string'}
+          icon={true}
+          onChangeText={setDescription}
+        />
+        <InputField
+          title="Field"
+          placeholder="Enter Field"
+          textAlignVertical="top"
+          value={description}
+          fieldType={'string'}
+          icon={true}
+          onChangeText={setDescription}
+        />
+        <InputField
+          title="Field"
+          placeholder="Enter FiAAAAAAAAAaeld"
+          textAlignVertical="top"
+          value={description}
+          fieldType={'string'}
+          icon={true}
+          onChangeText={setDescription}
         />
       </View>
     );
@@ -91,6 +103,12 @@ const ManageCategoriesScreen = (props: Props) => {
         showsVerticalScrollIndicator={false}>
         {renderFields()}
       </KeyboardAwareScrollView>
+      <GeneralButton
+        text={'Add Category'}
+        style={[styles.btn]}
+        textStyle={styles.btnText}
+        // onPress={handleCreate}
+      />
       <DatePicker
         modal
         mode={'date'}

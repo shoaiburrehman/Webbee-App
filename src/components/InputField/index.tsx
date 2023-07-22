@@ -36,6 +36,7 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
     return width;
   };
 
+  console.log('props.icon: ', props?.title, props.icon);
   return (
     <View style={[styles.container, props?.style]}>
       {props?.title && (
@@ -43,7 +44,7 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
           {props?.title}
         </Text>
       )}
-      <View style={[styles.flex, props.icon && {width: '82%'}]}>
+      <View style={[styles.flex, {width: props.icon ? '82%' : '90%'}]}>
         <View style={[styles.textInputContainer, props?.textInputContainer]}>
           <TextInputHOC
             {...props}
