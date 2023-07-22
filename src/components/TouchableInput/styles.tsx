@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     marginVertical: vh * 1.5,
   },
   titleText: {
-    ...Fonts.Regular(12, Colors.WHITE),
+    ...Fonts.Regular(14, Colors.BLACK),
     marginLeft: vw * 4,
     marginBottom: vh * 1,
   },

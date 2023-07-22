@@ -37,6 +37,7 @@ export const TouchableInput = (props: Props) => {
       )}
       <TouchableOpacity
         style={[styles.textInputContainer, props?.textInputContainer]}
+        activeOpacity={0.9}
         onPress={handleIconPress}>
         <Text
           style={[
