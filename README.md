@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 
@@ -77,3 +77,41 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+Problem statement:
+The company Construction Machine Management Inc. manages a fleet of diverse building machines and rents them out to building companies. The director Mr. Chechnik manages those with multiple paper staple folders. He would like to manage the inventory on his computer and asks you to develop an application for that purpose.
+
+User stories:
+As a staff member I want to have different machine types (bull dozers, cranes, chainsaws, ...)
+As a staff member I would like to specify which attributes the machine type has **once** (weight, power, manufacturing date, ...)
+As a staff member I want that attributes can be date, text, checkbox or number
+As a staff member I want to be able to update the attributes.
+As a staff member I want to be able to remove attributes that are no longer required
+As a staff member I want that all machines of one type share attributes (all cranes have a model, weight, manufacture date as well as a maximum lift weight for example)
+As a staff member I want to pick one of the attributes as a title attribute for the machines of one type (For eg. model).
+As a staff member I want to set a title for a machine type (Chainsaw, Bulldozer, ...)
+As a staff member I want to be able to add new machine types as well as to edit or delete existing ones at any time
+As a staff member I want to have many machines of each machine type ( for example 6 chainsaws from different brands that have different characteristics)
+As a staff member, I want to be able to filter by machine type (See all chain saws, all bull dozers, ...).
+As a staff member, I want to see the filters in a drawer.
+As a staff member I want to see all machines grouped by their type on one screen
+As a staff member I want to be able to add new machines as well as to edit or delete existing ones at any time
+As a staff member I want that everything is saved even after page reload
+As a staff member I want to use the app on my mobile phone or tablet.
+As a staff member I want that to see a beautiful user interface.
+**For a demo watch the following video:**
+
+## Do's
+
+use a library of your choice for the UI.
+use any other library that you consider helpful
+use ES6
+use Typescript
+use React Native
+use any State Management Library - Redux /Mobx/ any other state management library (Except for React context and component state)
+use expo or
+use CRNA
+use AsyncStorage
+preferably, write function components.
+Dont's
+create an API to store the data to a server.

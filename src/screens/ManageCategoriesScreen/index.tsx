@@ -110,6 +110,20 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(categories);
   };
 
+  const handleDeleteCategory = (item: CategoryType) => {
+    let cateories = categoriesList.filter((cat, index) => cat.Id !== item?.Id);
+    setCategoriesList(cateories);
+  };
+
+  const handleFieldsChange = (e, item, field) => {
+    // const index = e.target.id;
+    // setArr(s => {
+    //   const newArr = s.slice();
+    //   newArr[index].value = e.target.value;
+    //   return newArr;
+    // });
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View key={index} style={styles.fieldsView}>
@@ -133,14 +147,18 @@ const ManageCategoriesScreen = (props: Props) => {
           }
           onPress={() => setOpen(true)}
         /> */}
-        <InputField
-          title="Field"
-          placeholder="Enter Field"
-          value={description}
-          fieldType={'string'}
-          icon={true}
-          onChangeText={setDescription}
-        />
+        {item.Fields.map((field, i) => {
+          return (
+            <InputField
+              title="Field"
+              placeholder="Enter Field"
+              value={field.FieldName}
+              fieldType={field.FieldType}
+              icon={true}
+              onChangeText={e => handleFieldsChange(e, item, field)}
+            />
+          );
+        })}
         <GeneralButton
           text={'Title FIeld'}
           style={[styles.titleField]}
@@ -159,8 +177,7 @@ const ManageCategoriesScreen = (props: Props) => {
 
           <TouchableOpacity
             style={[styles.flexRow, styles.touchable]}
-            // onPress={handleIconPress}
-          >
+            onPress={() => handleDeleteCategory(item)}>
             <Image
               source={icons.delete}
               style={styles.icon}
