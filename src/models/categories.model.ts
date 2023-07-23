@@ -14,9 +14,13 @@ export type CategoryType = {
   TitleField: string;
   Data: [
     {
-      FieldName: string;
-      FieldType: FieldTypes;
-      FieldValue: string | number | Date | boolean | null;
+      item: [
+        {
+          FieldName: string;
+          FieldType: FieldTypes;
+          FieldValue: string | number | Date | boolean | null;
+        },
+      ];
     }?,
   ];
 };

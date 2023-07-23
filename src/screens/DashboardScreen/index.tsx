@@ -67,6 +67,28 @@ const DashboardScreen = (props: Props) => {
     index: number;
   };
 
+  const handleAddNewItem = (item: CategoryType) => {
+    const category = [...categoriesList];
+    category.forEach(cat => {
+      const data = []; // Initialize the data array inside the forEach loop for each category
+
+      cat.Fields.forEach(field => {
+        let temp = {
+          FieldName: field.FieldName,
+          FieldType: field.FieldType,
+          FieldValue: '',
+        };
+        data.push(temp);
+      });
+
+      cat.Data = [{item: data}]; // Reassign the Data property with the new item array
+      console.log('cat: ', cat);
+      return cat;
+    });
+
+    console.log(category);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View style={styles.fieldsView}>
@@ -76,7 +98,7 @@ const DashboardScreen = (props: Props) => {
             text={'Add New Item'}
             style={[styles.addNewItem]}
             textStyle={styles.addNewItemTxt}
-            // onPress={handleCreate}
+            onPress={() => handleAddNewItem(item)}
           />
         </View>
         {item.Data.length > 0 ? (
