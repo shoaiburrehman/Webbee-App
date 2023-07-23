@@ -26,6 +26,7 @@ import {
   addCategories,
   updateCategories,
 } from '../../redux/reducers/categories.slice';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
 type Props = {
   navigation: any;
@@ -35,7 +36,7 @@ type Props = {
 const ManageCategoriesScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
+  const [value, setValue] = useState(null);
   const [description, setDescription] = useState(taskDetail?.description || '');
   const [status, setStatus] = useState(taskDetail?.status || '');
   const [date, setDate] = useState(new Date());
@@ -66,8 +67,18 @@ const ManageCategoriesScreen = (props: Props) => {
     },
   ];
 
-  const categoriesList = useTypedSelector(state => state.categories.categories);
-  // const [categoriesList, setCategoriesList] = useState(categories);
+  const categories = useTypedSelector(state => state.categories.categories);
+  const [categoriesList, setCategoriesList] = useState(categories);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Do something when the screen is focused
+
+      return () => {
+        dispatch(updateCategories(categoriesList));
+      };
+    }, [categoriesList]),
+  );
 
   const renderEmptyComponent = () => {
     return (
@@ -87,14 +98,7 @@ const ManageCategoriesScreen = (props: Props) => {
     val: string | boolean,
     item: CategoryType,
   ) => {
-    // setCategoriesList(prev => {
-    //   return {
-    //     ...prev,
-    //     [key]: val,
-    //   };
-    // });
-    let categories = [...categoriesList];
-    categories.map((cat, index) => {
+    const categories = categoriesList.map((cat, index) => {
       if (cat.Id === item.Id) {
         cat = {
           ...cat,
@@ -103,39 +107,10 @@ const ManageCategoriesScreen = (props: Props) => {
       }
       return cat;
     });
-    dispatch(updateCategories(categories));
-  };
-
-  const updateCategory = (text: string, item: CategoryType) => {
-    console.log('text: ', text);
-    setTimeout(() => {
-      let categories = [...categoriesList];
-      categories.map((cat, index) => {
-        if (cat.Id === item.Id) {
-          cat.CategoryName = text;
-        }
-        return cat;
-      });
-      dispatch(updateCategories(categories));
-    }, 500);
-  };
-
-  const changeTextDebouncer = (text, item) => {
-    console.log('text inside: ', text);
-    setTimeout(() => {
-      let categories = [...categoriesList];
-      categories.map((cat, index) => {
-        if (cat.Id === item.Id) {
-          cat.CategoryName = text;
-        }
-        return cat;
-      });
-      dispatch(updateCategories(categories));
-    }, 500);
+    setCategoriesList(categories);
   };
 
   const renderFields = ({item, index}: renderPropType) => {
-    console.log('item: ', item);
     return (
       <View key={index} style={styles.fieldsView}>
         <Text style={styles.categoryHead}>{item.CategoryName}</Text>
@@ -210,7 +185,8 @@ const ManageCategoriesScreen = (props: Props) => {
       ],
       TitleField: 'Unnamed Field',
     };
-    dispatch(addCategories(Category));
+    // dispatch(addCategories(Category));
+    setCategoriesList(prev => [...prev, Category]);
   };
 
   return (
@@ -223,7 +199,7 @@ const ManageCategoriesScreen = (props: Props) => {
         showsVerticalScrollIndicator={false}>
         <FlatList
           data={categoriesList}
-          keyExtractor={index => index.toString()}
+          keyExtractor={index => index?.toString()}
           ListEmptyComponent={renderEmptyComponent}
           renderItem={(item, index) => renderFields(item, index)}
         />
