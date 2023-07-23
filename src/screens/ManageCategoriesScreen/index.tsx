@@ -10,6 +10,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
+import {useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import styles from './styles';
 import {useTypedSelector} from '../../redux/useTypedSelected';
@@ -18,6 +19,9 @@ import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
 import {Colors} from '../../themes/Colors';
 import {icons} from '../../assets';
+import {CategoryType} from '../../models/categories.model';
+import {FieldTypes} from '../../constants/categoriesConstants';
+import {addCategories} from '../../redux/reducers/categories.slice';
 
 type Props = {
   navigation: any;
@@ -26,14 +30,13 @@ type Props = {
 
 const ManageCategoriesScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
+  const dispatch = useDispatch();
   const [title, setTitle] = useState(taskDetail?.title || '');
   const [description, setDescription] = useState(taskDetail?.description || '');
   const [status, setStatus] = useState(taskDetail?.status || '');
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [isDate, setIsDate] = useState(false);
-  const generalModalRef = useRef<any>();
-  const setStatusRef = useRef<any>();
   let formatDate = dayjs(date).format('DD-MM-YYYY');
   const [selectedLanguage, setSelectedLanguage] = useState('Add New Field');
   const options = [
@@ -69,7 +72,12 @@ const ManageCategoriesScreen = (props: Props) => {
     );
   };
 
-  const renderFields = () => {
+  type renderPropType = {
+    item: CategoryType;
+    index: number;
+  };
+
+  const renderFields = ({item, index}: renderPropType) => {
     return (
       <View style={styles.fieldsView}>
         <Text style={styles.categoryHead}>New Category</Text>
@@ -132,6 +140,22 @@ const ManageCategoriesScreen = (props: Props) => {
     );
   };
 
+  const handleAddCategory = () => {
+    let Category: CategoryType = {
+      Id: dayjs(),
+      CategoryName: 'New Category',
+      Fields: [
+        {
+          FieldName: '',
+          FieldType: FieldTypes.TEXT,
+        },
+      ],
+      TitleField: 'Unnamed Field',
+    };
+    dispatch(addCategories(Category));
+  };
+
+  console.log('categoriesList: ', categoriesList);
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -142,14 +166,16 @@ const ManageCategoriesScreen = (props: Props) => {
         showsVerticalScrollIndicator={false}>
         <FlatList
           data={categoriesList}
+          keyExtractor={index => index.toString()}
           ListEmptyComponent={renderEmptyComponent}
+          renderItem={renderFields}
         />
       </KeyboardAwareScrollView>
       <GeneralButton
         text={'Add Category'}
         style={[styles.btn]}
         textStyle={styles.btnText}
-        // onPress={handleCreate}
+        onPress={handleAddCategory}
       />
       <DatePicker
         modal

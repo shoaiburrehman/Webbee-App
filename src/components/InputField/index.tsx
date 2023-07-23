@@ -46,7 +46,7 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
       <View
         style={[
           styles.flex,
-          {width: props.icon ? '82%' : props?.fieldType ? '90%' : '100%'},
+          {width: props.icon ? '90%' : props?.fieldType ? '90%' : '100%'},
         ]}>
         <View style={[styles.textInputContainer, props?.textInputContainer]}>
           <TextInputHOC

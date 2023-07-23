@@ -1,12 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
-export type CategoryStateType = {
-  categoriesName: string;
-  titleField: string | null;
-};
+import {CategoryType} from '../../models/categories.model';
 
 export type categoriesStateType = {
-  categories: CategoryStateType[];
+  categories: CategoryType[];
 };
 
 export const initialState: categoriesStateType = {
@@ -17,10 +13,10 @@ const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    addCategories: (state, action: PayloadAction<CategoryStateType>) => {
+    addCategories: (state, action: PayloadAction<CategoryType>) => {
       state.categories = [...state.categories, action.payload];
     },
-    updateCategories: (state, action: PayloadAction<CategoryStateType[]>) => {
+    updateCategories: (state, action: PayloadAction<CategoryType[]>) => {
       state.categories = action.payload;
     },
   },

@@ -1,15 +1,16 @@
+import {Dayjs} from 'dayjs';
 import {FieldTypes} from '../constants/categoriesConstants';
 
-export type fieldInfoType = {
-  fieldType: FieldTypes;
-  fieldName: string;
-};
-
 export type CategoryType = {
-  Id: string;
+  Id: Dayjs;
   CategoryName: string;
-  FieldInfo: fieldInfoType;
-  titleField: string;
+  Fields: [
+    {
+      FieldName: string;
+      FieldType: FieldTypes;
+    },
+  ];
+  TitleField: string;
 };
 
 export type categories = {
