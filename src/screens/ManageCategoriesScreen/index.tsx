@@ -5,6 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
 import dayjs from 'dayjs';
 import styles from './styles';
+import TouchablePicker from '../../components/TouchablePicker';
 import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
 import {Colors} from '../../themes/Colors';
@@ -98,18 +99,14 @@ const ManageCategoriesScreen = (props: Props) => {
           // onPress={handleCreate}
         />
         <View style={styles.flexRow}>
-          <View style={styles.addNewField}>
-            <Picker
-              mode={'dialog'}
-              selectedValue={'Add New Field'}
-              onValueChange={(itemValue, itemIndex) => console.log(itemValue)}
-              dropdownIconColor={Colors.PRIMARY_COLOR}
-              style={styles.picker}>
-              {options.map((item, index) => (
-                <Picker.Item label={item.label} value={item.value} />
-              ))}
-            </Picker>
-          </View>
+          <TouchablePicker
+            options={options}
+            mode={'dialog'}
+            selectedValue={'Add New Field'}
+            onValueChange={(itemValue, itemIndex) => console.log(itemValue)}
+            dropdownIconColor={Colors.PRIMARY_COLOR}
+            style={styles.picker}
+          />
 
           <TouchableOpacity
             style={[styles.flexRow, styles.touchable]}
