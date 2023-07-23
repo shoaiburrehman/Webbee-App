@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Image, TouchableOpacity, Text, KeyboardType} from 'react-native';
 import styles from './styles';
 import {vw} from '../../themes/units';
 import TextInputHOC from '../TextInputHOC';
 import {icons} from '../../assets';
 import {FieldTypes} from '../../constants/categoriesConstants';
+import TouchablePicker from '../TouchablePicker';
+import {Colors} from '../../themes/Colors';
 
 interface Props {
   style: {};
@@ -18,10 +20,37 @@ interface Props {
   textInputStyle: {};
   icon: any;
   fieldType: FieldTypes;
+  onFieldTypePress?: () => void;
   placeholder: string;
 }
 
+const options = [
+  {
+    label: 'Fields',
+    value: null,
+  },
+  {
+    label: 'Text',
+    value: 'TEXT',
+  },
+  {
+    label: 'Date',
+    value: 'DATE',
+  },
+  {
+    label: 'Checkbox',
+    value: 'CHECKBOX',
+  },
+  {
+    label: 'Number',
+    value: 'NUMBER',
+  },
+];
+
 const InputField = React.forwardRef((props: Props, ref: Ref) => {
+  const [fieldType, setFieldType] = useState<FieldTypes>(
+    props?.fieldType || null,
+  );
   const handleIconPress = () => {
     if (props?.onPress) {
       props?.onPress();
@@ -61,7 +90,10 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
             ]}
           />
           {props?.fieldType && (
-            <TouchableOpacity style={styles.fieldTypeView} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={styles.fieldTypeView}
+              activeOpacity={0.8}
+              onPress={props?.onFieldTypePress}>
               <Text style={styles.fieldType}>{props?.fieldType}</Text>
             </TouchableOpacity>
           )}

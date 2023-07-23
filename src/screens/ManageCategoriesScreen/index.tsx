@@ -6,6 +6,8 @@ import {
   Platform,
   TouchableOpacity,
   FlatList,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import debounce from 'lodash.debounce';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -27,6 +29,7 @@ import {
   updateCategories,
 } from '../../redux/reducers/categories.slice';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import ModalViewWrapper from '../../modal/ModalWrapper';
 
 type Props = {
   navigation: any;
@@ -35,10 +38,10 @@ type Props = {
 
 const ManageCategoriesScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
+  const [indexCategory, setIndexCategory] = useState<number | null>(null);
   const dispatch = useDispatch();
-  const [value, setValue] = useState(null);
-  const [description, setDescription] = useState(taskDetail?.description || '');
-  const [status, setStatus] = useState(taskDetail?.status || '');
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [isDate, setIsDate] = useState(false);
@@ -141,6 +144,40 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(categories);
   };
 
+  const onFieldTypePress = (select: object) => {
+    const category = categoriesList.map((item, i) => {
+      if (item.Id == itemCategory?.Id) {
+        // const options = field.options.filter((item, index) => item != value)
+        const options = item.Fields.map((field, index) => {
+          if (index == indexCategory) {
+            field = {
+              FieldType: select.value,
+              FieldName: '',
+            };
+          }
+          return field;
+        });
+        return {...item, Fields: options};
+      }
+      return item;
+    });
+    setCategoriesList(category);
+    setIndexCategory(null);
+    setItemCategory(null);
+    setOpenModal(!openModal);
+  };
+
+  const onFieldDelete = (item: CategoryType, i: number) => {
+    const category = categoriesList.map((cat, i) => {
+      if (item.Id == cat?.Id) {
+        const options = item.Fields.filter((item, index) => index != i);
+        return {...item, Fields: options};
+      }
+      return item;
+    });
+    setCategoriesList(category);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View key={index} style={styles.fieldsView}>
@@ -168,19 +205,29 @@ const ManageCategoriesScreen = (props: Props) => {
           return (
             <>
               <InputField
-                title="Field"
-                placeholder="Enter Field"
-                keyboardType={
-                  field.FieldType == FieldTypes.NUMBER ? 'numeric' : 'text'
-                }
+                title="Field Name"
+                placeholder="Enter Field Name"
+                keyboardType={'text'}
                 value={field.FieldName}
                 fieldType={field.FieldType}
                 icon={true}
+                onPress={() => onFieldDelete(item, i)}
+                onFieldTypePress={() => {
+                  setItemCategory(item);
+                  setOpenModal(!openModal);
+                  setIndexCategory(i);
+                }}
                 onChangeText={e => handleFieldsChange(e, item, field)}
               />
             </>
           );
         })}
+        <ModalViewWrapper
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          options={options}
+          onItemSelect={select => onFieldTypePress(select)}
+        />
         <GeneralButton
           text={'Title FIeld'}
           style={[styles.titleField]}

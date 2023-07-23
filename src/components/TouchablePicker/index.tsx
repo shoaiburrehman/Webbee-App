@@ -9,13 +9,14 @@ type PickerTypes = PickerProps & {
     label: string;
     value: string | null;
   }[];
+  container: ViewStyle;
 };
 
 const TouchablePicker = (props: PickerTypes) => {
   const {style, placeholder, ...rest} = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props?.container]}>
       <Picker
         mode={props?.mode}
         selectedValue={props?.selectedValue}

@@ -52,6 +52,16 @@ const styles = StyleSheet.create({
     marginTop: vw,
     // backgroundColor: 'red',
   },
+  pickerContainer: {
+    alignItems: 'flex-end',
+    alignSelf: 'flex-end',
+    borderColor: 'transparent',
+    width: vw * 40,
+  },
+  picker: {
+    width: '100%',
+    color: Colors.PRIMARY_COLOR,
+  },
 });
 
 export default styles;
