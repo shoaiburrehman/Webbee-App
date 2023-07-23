@@ -32,6 +32,12 @@ const styles = StyleSheet.create({
     ...Fonts.Regular(14, Colors.WHITE),
     textAlign: 'center',
   },
+  switchText: {
+    marginLeft: vw * 2,
+  },
+  switchView: {
+    marginVertical: vh,
+  },
   touchable: {
     flexDirection: 'row',
     alignItems: 'center',
