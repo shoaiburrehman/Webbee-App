@@ -12,6 +12,13 @@ export type CategoryType = {
     },
   ];
   TitleField: string;
+  Data: [
+    {
+      FieldName: string;
+      FieldType: FieldTypes;
+      FieldValue: string | number | Date | boolean | null;
+    }?,
+  ];
 };
 
 export type categories = {

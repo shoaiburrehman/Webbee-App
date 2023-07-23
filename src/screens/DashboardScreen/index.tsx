@@ -79,38 +79,48 @@ const DashboardScreen = (props: Props) => {
             // onPress={handleCreate}
           />
         </View>
-        {item.Fields.length > 0 ? (
+        {item.Data.length > 0 ? (
           <>
-            <InputField
-              title="Title"
-              placeholder="Enter Title"
-              value={title}
-              onChangeText={setTitle}
-            />
-            <View style={[styles.touchable, styles.switchView]}>
-              <Switch
-                trackColor={Colors.PRIMARY_COLOR}
-                thumbColor={Colors.WHITE}
-                ios_backgroundColor={Colors.PLACE_HOLDER}
-                onValueChange={() => setSwitchValue(!switchValue)}
-                value={switchValue}
-              />
-              <Text style={styles.switchText}>Does it work</Text>
-            </View>
-            <TouchableOpacity
-              style={styles.touchable}
-              // onPress={handleIconPress}
-            >
-              <Image
-                source={icons.delete}
-                style={styles.icon}
-                resizeMode="contain"
-              />
-              <Text style={styles.removeText}>Remove</Text>
-            </TouchableOpacity>
+            {item.Data.map((field, ind) => {
+              return (
+                <>
+                  <InputField
+                    title="Title"
+                    placeholder="Enter Title"
+                    value={title}
+                    onChangeText={setTitle}
+                  />
+                  <View style={[styles.touchable, styles.switchView]}>
+                    <Switch
+                      trackColor={Colors.PRIMARY_COLOR}
+                      thumbColor={Colors.WHITE}
+                      ios_backgroundColor={Colors.PLACE_HOLDER}
+                      onValueChange={() => setSwitchValue(!switchValue)}
+                      value={switchValue}
+                    />
+                    <Text style={styles.switchText}>Does it work</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.touchable}
+                    // onPress={handleIconPress}
+                  >
+                    <Image
+                      source={icons.delete}
+                      style={styles.icon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.removeText}>Remove</Text>
+                  </TouchableOpacity>
+                </>
+              );
+            })}
           </>
         ) : (
-          <>{renderEmptyComponent(`No Item Found in ${item.CategoryName}`)}</>
+          <View style={styles.emptyCatView}>
+            <Text style={styles.emptyText}>
+              No Item Found in {item.CategoryName}
+            </Text>
+          </View>
         )}
         {/* <TouchableInput
           title="Deadline"

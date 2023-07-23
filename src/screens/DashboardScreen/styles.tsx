@@ -19,7 +19,12 @@ const styles = StyleSheet.create({
   emptyText: {
     ...Fonts.Regular(14),
   },
-
+  emptyCatView: {
+    height: vh * 15,
+    width: vw * 82,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -326,6 +326,7 @@ const ManageCategoriesScreen = (props: Props) => {
         },
       ],
       TitleField: 'Unnamed Field',
+      Data: [],
     };
     setCategoriesList(prev => [...prev, Category]);
   };
