@@ -89,6 +89,20 @@ const styles = StyleSheet.create({
     ...Fonts.Medium(20),
     marginBottom: vh * 2,
   },
+  submit: {
+    marginVertical: vh * 2,
+    width: vw * 85,
+    height: vh * 8,
+    borderRadius: vw * 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.PRIMARY_COLOR,
+  },
+  submitTxt: {
+    ...Fonts.Regular(14, Colors.WHITE),
+    textAlign: 'center',
+  },
+
   textInputStyle: {
     height: vh * 17,
   },

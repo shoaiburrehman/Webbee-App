@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   View,
   Image,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+import debounce from 'lodash.debounce';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import {Picker} from '@react-native-picker/picker';
@@ -21,7 +22,10 @@ import {Colors} from '../../themes/Colors';
 import {icons} from '../../assets';
 import {CategoryType} from '../../models/categories.model';
 import {FieldTypes} from '../../constants/categoriesConstants';
-import {addCategories} from '../../redux/reducers/categories.slice';
+import {
+  addCategories,
+  updateCategories,
+} from '../../redux/reducers/categories.slice';
 
 type Props = {
   navigation: any;
@@ -31,7 +35,7 @@ type Props = {
 const ManageCategoriesScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
   const dispatch = useDispatch();
-  const [title, setTitle] = useState(taskDetail?.title || '');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState(taskDetail?.description || '');
   const [status, setStatus] = useState(taskDetail?.status || '');
   const [date, setDate] = useState(new Date());
@@ -63,6 +67,7 @@ const ManageCategoriesScreen = (props: Props) => {
   ];
 
   const categoriesList = useTypedSelector(state => state.categories.categories);
+  // const [categoriesList, setCategoriesList] = useState(categories);
 
   const renderEmptyComponent = () => {
     return (
@@ -77,16 +82,69 @@ const ManageCategoriesScreen = (props: Props) => {
     index: number;
   };
 
+  const handleChange = (
+    key: string,
+    val: string | boolean,
+    item: CategoryType,
+  ) => {
+    // setCategoriesList(prev => {
+    //   return {
+    //     ...prev,
+    //     [key]: val,
+    //   };
+    // });
+    let categories = [...categoriesList];
+    categories.map((cat, index) => {
+      if (cat.Id === item.Id) {
+        cat = {
+          ...cat,
+          [key]: val,
+        };
+      }
+      return cat;
+    });
+    dispatch(updateCategories(categories));
+  };
+
+  const updateCategory = (text: string, item: CategoryType) => {
+    console.log('text: ', text);
+    setTimeout(() => {
+      let categories = [...categoriesList];
+      categories.map((cat, index) => {
+        if (cat.Id === item.Id) {
+          cat.CategoryName = text;
+        }
+        return cat;
+      });
+      dispatch(updateCategories(categories));
+    }, 500);
+  };
+
+  const changeTextDebouncer = (text, item) => {
+    console.log('text inside: ', text);
+    setTimeout(() => {
+      let categories = [...categoriesList];
+      categories.map((cat, index) => {
+        if (cat.Id === item.Id) {
+          cat.CategoryName = text;
+        }
+        return cat;
+      });
+      dispatch(updateCategories(categories));
+    }, 500);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
+    console.log('item: ', item);
     return (
-      <View style={styles.fieldsView}>
-        <Text style={styles.categoryHead}>New Category</Text>
+      <View key={index} style={styles.fieldsView}>
+        <Text style={styles.categoryHead}>{item.CategoryName}</Text>
         <InputField
           title="Category Name"
           placeholder="Enter Category Name"
-          value={title}
+          value={item.CategoryName}
+          onChangeText={e => handleChange('CategoryName', e, item)}
           textInputContainer={{width: '90%'}}
-          onChangeText={setTitle}
         />
         {/* <TouchableInput
           title="Deadline"
@@ -155,7 +213,6 @@ const ManageCategoriesScreen = (props: Props) => {
     dispatch(addCategories(Category));
   };
 
-  console.log('categoriesList: ', categoriesList);
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -168,7 +225,7 @@ const ManageCategoriesScreen = (props: Props) => {
           data={categoriesList}
           keyExtractor={index => index.toString()}
           ListEmptyComponent={renderEmptyComponent}
-          renderItem={renderFields}
+          renderItem={(item, index) => renderFields(item, index)}
         />
       </KeyboardAwareScrollView>
       <GeneralButton
