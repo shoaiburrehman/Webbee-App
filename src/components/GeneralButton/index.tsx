@@ -10,7 +10,10 @@ type Props = {
 
 const GeneralButton: React.FC<Props> = (props: Props) => {
   return (
-    <TouchableOpacity style={props.style} onPress={props.onPress}>
+    <TouchableOpacity
+      style={props.style}
+      onPress={props.onPress}
+      activeOpacity={0.8}>
       <Text style={props.textStyle}>{props.text}</Text>
     </TouchableOpacity>
   );

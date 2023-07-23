@@ -36,7 +36,6 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
     return width;
   };
 
-  console.log('props.icon: ', props?.title, props.icon);
   return (
     <View style={[styles.container, props?.style]}>
       {props?.title && (

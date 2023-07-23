@@ -86,6 +86,9 @@ const DashboardScreen = (props: Props) => {
     <View style={styles.container}>
       <KeyboardAwareScrollView
         style={styles.subContainer}
+        enableOnAndroid={true}
+        extraHeight={70}
+        extraScrollHeight={70}
         showsVerticalScrollIndicator={false}>
         {renderFields()}
       </KeyboardAwareScrollView>

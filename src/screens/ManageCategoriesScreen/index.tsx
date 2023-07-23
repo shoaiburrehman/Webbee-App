@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
-import {View, Image, Text} from 'react-native';
+import {View, Image, Text, Platform, TouchableOpacity} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import dayjs from 'dayjs';
@@ -7,6 +7,7 @@ import styles from './styles';
 import {TouchableInput} from '../../components/TouchableInput';
 import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
+import {icons} from '../../assets';
 
 type Props = {
   navigation: any;
@@ -65,33 +66,31 @@ const ManageCategoriesScreen = (props: Props) => {
           icon={true}
           onChangeText={setDescription}
         />
-        <InputField
-          title="Field"
-          placeholder="Enter Field"
-          textAlignVertical="top"
-          value={description}
-          fieldType={'string'}
-          icon={true}
-          onChangeText={setDescription}
+        <GeneralButton
+          text={'Title FIeld'}
+          style={[styles.titleField]}
+          textStyle={styles.btnText}
+          // onPress={handleCreate}
         />
-        <InputField
-          title="Field"
-          placeholder="Enter Field"
-          textAlignVertical="top"
-          value={description}
-          fieldType={'string'}
-          icon={true}
-          onChangeText={setDescription}
-        />
-        <InputField
-          title="Field"
-          placeholder="Enter FiAAAAAAAAAaeld"
-          textAlignVertical="top"
-          value={description}
-          fieldType={'string'}
-          icon={true}
-          onChangeText={setDescription}
-        />
+        <View style={styles.flexRow}>
+          <GeneralButton
+            text={'Add New FIeld'}
+            style={[styles.addNewField]}
+            textStyle={styles.addNewFieldTxt}
+            // onPress={handleCreate}
+          />
+          <TouchableOpacity
+            style={[styles.flexRow, styles.touchable]}
+            // onPress={handleIconPress}
+          >
+            <Image
+              source={icons.delete}
+              style={styles.icon}
+              resizeMode="contain"
+            />
+            <Text style={styles.removeText}>Remove</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -100,6 +99,9 @@ const ManageCategoriesScreen = (props: Props) => {
     <View style={styles.container}>
       <KeyboardAwareScrollView
         style={styles.subContainer}
+        enableOnAndroid={true}
+        extraHeight={100}
+        extraScrollHeight={100}
         showsVerticalScrollIndicator={false}>
         {renderFields()}
       </KeyboardAwareScrollView>
