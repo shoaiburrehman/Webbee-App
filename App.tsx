@@ -6,21 +6,27 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor, store} from './src/redux/store';
 import Navigations from './src/navigations/index';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <StatusBar
-        translucent={true}
-        backgroundColor="transparent"
-        barStyle="light-content"
-      />
-      {/* <Loader /> */}
-      <Navigations />
-    </View>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <View style={styles.container}>
+          <StatusBar
+            translucent={true}
+            backgroundColor="transparent"
+            barStyle="light-content"
+          />
+          <Navigations />
+        </View>
+      </PersistGate>
+    </Provider>
   );
 };
 
