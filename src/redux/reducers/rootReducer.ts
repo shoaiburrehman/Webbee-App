@@ -4,8 +4,11 @@ const rootReducer = combineReducers({
   categories: categoriesSlice,
 });
 
-import categoriesSlice, {setCategoriesData} from './categories.slice';
+import categoriesSlice, {
+  addCategories,
+  updateCategories,
+} from './categories.slice';
 
-export {setCategoriesData};
+export {addCategories, updateCategories};
 
 export default rootReducer;

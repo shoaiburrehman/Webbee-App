@@ -1,23 +1,31 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export type CategoriesStateType = {
+export type CategoryStateType = {
   categoriesName: string;
+  titleField: string | null;
 };
 
-export const initialState: CategoriesStateType = {
-  categoriesName: '',
+export type categoriesStateType = {
+  categories: CategoryStateType[];
+};
+
+export const initialState: categoriesStateType = {
+  categories: [],
 };
 
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    setCategoriesData: (state, action: PayloadAction<string>) => {
-      state.categoriesName = action.payload;
+    addCategories: (state, action: PayloadAction<CategoryStateType>) => {
+      state.categories = [...state.categories, action.payload];
+    },
+    updateCategories: (state, action: PayloadAction<CategoryStateType[]>) => {
+      state.categories = action.payload;
     },
   },
 });
 
-export const {setCategoriesData} = categoriesSlice.actions;
+export const {addCategories, updateCategories} = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

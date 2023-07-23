@@ -1,4 +1,4 @@
-export enum user_login_type {
+export enum FieldTypes {
   TEXT = 'Text',
   CHECKBOX = 'Checkbox',
   DATE = 'Date',
