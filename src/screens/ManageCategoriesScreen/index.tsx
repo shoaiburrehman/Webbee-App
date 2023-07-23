@@ -2,11 +2,12 @@ import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
 import {View, Image, Text, Platform, TouchableOpacity} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
+import {Picker} from '@react-native-picker/picker';
 import dayjs from 'dayjs';
 import styles from './styles';
-import {TouchableInput} from '../../components/TouchableInput';
 import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
+import {Colors} from '../../themes/Colors';
 import {icons} from '../../assets';
 
 type Props = {
@@ -25,6 +26,29 @@ const ManageCategoriesScreen = (props: Props) => {
   const generalModalRef = useRef<any>();
   const setStatusRef = useRef<any>();
   let formatDate = dayjs(date).format('DD-MM-YYYY');
+  const options = [
+    {
+      label: 'Add New Field',
+      value: null,
+    },
+    {
+      label: 'Text',
+      value: 'Text',
+    },
+    {
+      label: 'String',
+      value: 'String',
+    },
+    {
+      label: 'Checkbox',
+      value: 'Checkbox',
+    },
+    {
+      label: 'Number',
+      value: 'Number',
+    },
+  ];
+  const [selectedLanguage, setSelectedLanguage] = useState('Add New Field');
 
   const handleOnAccept = () => {
     if (taskDetail) {
@@ -74,12 +98,19 @@ const ManageCategoriesScreen = (props: Props) => {
           // onPress={handleCreate}
         />
         <View style={styles.flexRow}>
-          <GeneralButton
-            text={'Add New FIeld'}
-            style={[styles.addNewField]}
-            textStyle={styles.addNewFieldTxt}
-            // onPress={handleCreate}
-          />
+          <View style={styles.addNewField}>
+            <Picker
+              mode={'dialog'}
+              selectedValue={'Add New Field'}
+              onValueChange={(itemValue, itemIndex) => console.log(itemValue)}
+              dropdownIconColor={Colors.PRIMARY_COLOR}
+              style={styles.picker}>
+              {options.map((item, index) => (
+                <Picker.Item label={item.label} value={item.value} />
+              ))}
+            </Picker>
+          </View>
+
           <TouchableOpacity
             style={[styles.flexRow, styles.touchable]}
             // onPress={handleIconPress}

@@ -39,14 +39,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   addNewField: {
+    width: vw * 50,
     marginVertical: vh,
-    paddingHorizontal: vw * 5,
     height: vh * 6,
     borderRadius: vw * 2,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     borderColor: Colors.PRIMARY_COLOR,
     borderWidth: 1,
+  },
+  picker: {
+    width: '100%',
+    paddingLeft: 10,
+    borderWidth: 5,
+    borderRadius: 10,
+    color: Colors.PRIMARY_COLOR,
   },
   addNewFieldTxt: {
     ...Fonts.Regular(14, Colors.PRIMARY_COLOR),
