@@ -122,7 +122,7 @@ const ManageCategoriesScreen = (props: Props) => {
     const category = categoriesList.map((cat, ind) => {
       if (item.Id == cat?.Id) {
         console.log('item.Id: ', item.Id);
-        const options = item.Fields.map((field, index) => {
+        const options = cat.Fields.map((field, index) => {
           if (index == i) {
             field = {
               FieldType: field.FieldType,
@@ -131,18 +131,14 @@ const ManageCategoriesScreen = (props: Props) => {
           }
           return field;
         });
-        return {...item, Fields: options};
+        cat = {
+          ...cat,
+          Fields: options,
+        };
       }
-      return item;
+      return cat;
     });
     setCategoriesList(category);
-
-    // const index = e.target.id;
-    // setArr(s => {
-    //   const newArr = s.slice();
-    //   newArr[index].value = e.target.value;
-    //   return newArr;
-    // });
   };
 
   const handleAddField = (item: CategoryType, type: FieldTypes) => {
@@ -226,7 +222,6 @@ const ManageCategoriesScreen = (props: Props) => {
               <InputField
                 title={field.FieldName !== '' ? field.FieldName : 'Field Name'}
                 placeholder="Enter Field Name"
-                keyboardType={'text'}
                 value={field.FieldName}
                 fieldType={field.FieldType}
                 icon={true}
