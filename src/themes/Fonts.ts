@@ -38,7 +38,6 @@ export default class Fonts {
     size: number = Fonts.Size.normal,
     color: string = APP_PRIMARY_TEXT,
   ): TextStyle => {
-    console.log('size: ', size);
     return {
       fontFamily: Fonts.FontFamily.default + '-' + type,
       fontSize: size,

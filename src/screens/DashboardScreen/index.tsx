@@ -1,11 +1,12 @@
 import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
-import {View, Image, Text} from 'react-native';
+import {View, Image, Text, TouchableOpacity} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import styles from './styles';
 import {TouchableInput} from '../../components/TouchableInput';
 import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
+import {icons} from '../../assets';
 
 type Props = {
   navigation: any;
@@ -36,20 +37,34 @@ const DashboardScreen = (props: Props) => {
   const renderFields = () => {
     return (
       <View style={styles.fieldsView}>
+        <View style={styles.flexRow}>
+          <Text style={styles.categoryHead}>New Category</Text>
+          <GeneralButton
+            text={'Add New Item'}
+            style={[styles.addNewItem]}
+            textStyle={styles.addNewItemTxt}
+            // onPress={handleCreate}
+          />
+        </View>
+
         <InputField
           title="Title"
           placeholder="Enter Title"
           value={title}
           onChangeText={setTitle}
         />
-        {taskDetail && (
-          <TouchableInput
-            title="Status"
-            placeholder="Select Status"
-            value={status ? status : 'Select Status'}
-            onPress={() => setStatusRef?.current.show()}
+        <TouchableOpacity
+          style={styles.touchable}
+          // onPress={handleIconPress}
+        >
+          <Image
+            source={icons.delete}
+            style={styles.icon}
+            resizeMode="contain"
           />
-        )}
+          <Text style={styles.removeText}>Remove</Text>
+        </TouchableOpacity>
+
         {/* <TouchableInput
           title="Deadline"
           placeholder="Select Deadline"
@@ -62,22 +77,6 @@ const DashboardScreen = (props: Props) => {
           }
           onPress={() => setOpen(true)}
         /> */}
-        <InputField
-          title="Description"
-          placeholder="Enter Description"
-          multiline={true}
-          textAlignVertical="top"
-          textInputStyle={styles.textInputStyle}
-          value={description}
-          onChangeText={setDescription}
-        />
-
-        <GeneralButton
-          text={taskDetail ? 'Edit Task' : 'Add Task'}
-          style={[styles.btn]}
-          textStyle={styles.btnText}
-          // onPress={handleCreate}
-        />
       </View>
     );
   };

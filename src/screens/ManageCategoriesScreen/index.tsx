@@ -44,6 +44,7 @@ const ManageCategoriesScreen = (props: Props) => {
           title="Category Name"
           placeholder="Enter Category Name"
           value={title}
+          textInputContainer={{width: '90%'}}
           onChangeText={setTitle}
         />
         {/* <TouchableInput
@@ -61,7 +62,6 @@ const ManageCategoriesScreen = (props: Props) => {
         <InputField
           title="Field"
           placeholder="Enter Field"
-          textAlignVertical="top"
           value={description}
           fieldType={'string'}
           icon={true}

@@ -11,6 +11,43 @@ const styles = StyleSheet.create({
   subContainer: {
     flex: 1,
   },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: vh,
+  },
+  categoryHead: {
+    ...Fonts.Medium(20),
+  },
+  addNewItem: {
+    paddingHorizontal: vw * 5,
+    height: vh * 5,
+    borderRadius: vw * 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.PRIMARY_COLOR,
+  },
+  addNewItemTxt: {
+    ...Fonts.Regular(14, Colors.WHITE),
+    textAlign: 'center',
+  },
+  touchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: vw,
+  },
+  icon: {
+    height: vh * 4,
+    width: vw * 4,
+    tintColor: Colors.PRIMARY_COLOR,
+  },
+  removeText: {
+    marginLeft: vw * 2,
+    ...Fonts.Regular(14, Colors.PRIMARY_COLOR),
+    textAlign: 'center',
+  },
+
   btn: {
     marginVertical: vh * 4,
     width: vw * 80,
