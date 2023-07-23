@@ -118,7 +118,25 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(cateories);
   };
 
-  const handleFieldsChange = (e, item, field) => {
+  const handleFieldsChange = (e: string, item: CategoryType, i: number) => {
+    const category = categoriesList.map((cat, ind) => {
+      if (item.Id == cat?.Id) {
+        console.log('item.Id: ', item.Id);
+        const options = item.Fields.map((field, index) => {
+          if (index == i) {
+            field = {
+              FieldType: field.FieldType,
+              FieldName: e,
+            };
+          }
+          return field;
+        });
+        return {...item, Fields: options};
+      }
+      return item;
+    });
+    setCategoriesList(category);
+
     // const index = e.target.id;
     // setArr(s => {
     //   const newArr = s.slice();
@@ -178,6 +196,7 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(category);
   };
 
+  console.log('categoryList: ', categoriesList);
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View key={index} style={styles.fieldsView}>
@@ -205,7 +224,7 @@ const ManageCategoriesScreen = (props: Props) => {
           return (
             <>
               <InputField
-                title="Field Name"
+                title={field.FieldName !== '' ? field.FieldName : 'Field Name'}
                 placeholder="Enter Field Name"
                 keyboardType={'text'}
                 value={field.FieldName}
@@ -217,7 +236,7 @@ const ManageCategoriesScreen = (props: Props) => {
                   setOpenModal(!openModal);
                   setIndexCategory(i);
                 }}
-                onChangeText={e => handleFieldsChange(e, item, field)}
+                onChangeText={e => handleFieldsChange(e, item, i)}
               />
             </>
           );
@@ -263,7 +282,7 @@ const ManageCategoriesScreen = (props: Props) => {
 
   const handleAddCategory = () => {
     let Category: CategoryType = {
-      Id: dayjs(),
+      Id: categoriesList.length + 1,
       CategoryName: 'New Category',
       Fields: [
         {

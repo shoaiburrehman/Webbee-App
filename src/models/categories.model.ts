@@ -2,7 +2,7 @@ import {Dayjs} from 'dayjs';
 import {FieldTypes} from '../constants/categoriesConstants';
 
 export type CategoryType = {
-  Id: Dayjs;
+  Id: number;
   CategoryName: string;
   Fields: [
     {
