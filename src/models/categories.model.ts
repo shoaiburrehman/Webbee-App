@@ -8,6 +8,7 @@ export type CategoryType = {
     {
       FieldName: string;
       FieldType: FieldTypes;
+      FieldValue: string | number | Date | boolean | null;
     },
   ];
   TitleField: string;

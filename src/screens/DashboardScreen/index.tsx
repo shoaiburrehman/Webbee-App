@@ -1,5 +1,18 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
-import {View, Image, Text, TouchableOpacity, Switch} from 'react-native';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  Switch,
+  FlatList,
+} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
 import styles from './styles';
@@ -8,6 +21,11 @@ import GeneralButton from '../../components/GeneralButton';
 import InputField from '../../components/InputField';
 import {icons} from '../../assets';
 import {Colors} from '../../themes/Colors';
+import {useTypedSelector} from '../../redux/useTypedSelected';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {updateCategories} from '../../redux/reducers/categories.slice';
+import {CategoryType} from '../../models/categories.model';
 
 type Props = {
   navigation: any;
@@ -16,6 +34,7 @@ type Props = {
 
 const DashboardScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
+  const dispatch = useDispatch();
   const [title, setTitle] = useState(taskDetail?.title || '');
   const [description, setDescription] = useState(taskDetail?.description || '');
   const [status, setStatus] = useState(taskDetail?.status || '');
@@ -23,24 +42,36 @@ const DashboardScreen = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [switchValue, setSwitchValue] = useState<boolean>(false);
   const [isDate, setIsDate] = useState(false);
-  const generalModalRef = useRef<any>();
-  const setStatusRef = useRef<any>();
 
-  const handleOnAccept = () => {
-    if (taskDetail) {
-      props.navigation.goBack();
-    } else {
-      setTitle('');
-      setDescription('');
-      props?.navigation.navigate('HomeNavigator');
-    }
+  const categories = useTypedSelector(state => state.categories.categories);
+  const [categoriesList, setCategoriesList] = useState(categories);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (categories?.length != 0) {
+        setCategoriesList(categories);
+      }
+    }, [categories]),
+  );
+
+  const renderEmptyComponent = (text: string) => {
+    return (
+      <View style={styles.emptyView}>
+        <Text style={styles.emptyText}>{text}</Text>
+      </View>
+    );
   };
 
-  const renderFields = () => {
+  type renderPropType = {
+    item: CategoryType;
+    index: number;
+  };
+
+  const renderFields = ({item, index}: renderPropType) => {
     return (
       <View style={styles.fieldsView}>
         <View style={styles.flexRow}>
-          <Text style={styles.categoryHead}>New Category</Text>
+          <Text style={styles.categoryHead}>{item.CategoryName}</Text>
           <GeneralButton
             text={'Add New Item'}
             style={[styles.addNewItem]}
@@ -48,35 +79,39 @@ const DashboardScreen = (props: Props) => {
             // onPress={handleCreate}
           />
         </View>
-
-        <InputField
-          title="Title"
-          placeholder="Enter Title"
-          value={title}
-          onChangeText={setTitle}
-        />
-        <View style={[styles.touchable, styles.switchView]}>
-          <Switch
-            trackColor={Colors.PRIMARY_COLOR}
-            thumbColor={Colors.WHITE}
-            ios_backgroundColor={Colors.PLACE_HOLDER}
-            onValueChange={() => setSwitchValue(!switchValue)}
-            value={switchValue}
-          />
-          <Text style={styles.switchText}>Does it work</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.touchable}
-          // onPress={handleIconPress}
-        >
-          <Image
-            source={icons.delete}
-            style={styles.icon}
-            resizeMode="contain"
-          />
-          <Text style={styles.removeText}>Remove</Text>
-        </TouchableOpacity>
-
+        {item.Fields.length > 0 ? (
+          <>
+            <InputField
+              title="Title"
+              placeholder="Enter Title"
+              value={title}
+              onChangeText={setTitle}
+            />
+            <View style={[styles.touchable, styles.switchView]}>
+              <Switch
+                trackColor={Colors.PRIMARY_COLOR}
+                thumbColor={Colors.WHITE}
+                ios_backgroundColor={Colors.PLACE_HOLDER}
+                onValueChange={() => setSwitchValue(!switchValue)}
+                value={switchValue}
+              />
+              <Text style={styles.switchText}>Does it work</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.touchable}
+              // onPress={handleIconPress}
+            >
+              <Image
+                source={icons.delete}
+                style={styles.icon}
+                resizeMode="contain"
+              />
+              <Text style={styles.removeText}>Remove</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>{renderEmptyComponent(`No Item Found in ${item.CategoryName}`)}</>
+        )}
         {/* <TouchableInput
           title="Deadline"
           placeholder="Select Deadline"
@@ -93,15 +128,23 @@ const DashboardScreen = (props: Props) => {
     );
   };
 
+  console.log('categoriesList: ', categoriesList);
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
         style={styles.subContainer}
         enableOnAndroid={true}
-        extraHeight={70}
-        extraScrollHeight={70}
+        extraHeight={100}
+        extraScrollHeight={100}
         showsVerticalScrollIndicator={false}>
-        {renderFields()}
+        <FlatList
+          data={categoriesList}
+          keyExtractor={index => index?.toString()}
+          ListEmptyComponent={() =>
+            renderEmptyComponent('No Categories Found on Dashboard')
+          }
+          renderItem={(item, index) => renderFields(item, index)}
+        />
       </KeyboardAwareScrollView>
       <DatePicker
         modal

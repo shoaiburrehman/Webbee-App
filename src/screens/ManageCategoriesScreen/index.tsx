@@ -123,6 +123,7 @@ const ManageCategoriesScreen = (props: Props) => {
         const options = cat.Fields.map((field, index) => {
           if (index == i) {
             field = {
+              ...field,
               FieldType: field.FieldType,
               FieldName: e,
             };
@@ -145,6 +146,7 @@ const ManageCategoriesScreen = (props: Props) => {
         let field = {
           FieldName: '',
           FieldType: type,
+          FieldValue: null,
         };
         cat = {
           ...cat,
@@ -178,8 +180,9 @@ const ManageCategoriesScreen = (props: Props) => {
         const options = item.Fields.map((field, index) => {
           if (index == indexCategory) {
             field = {
+              ...field,
               FieldType: select.value,
-              FieldName: '',
+              // FieldName: '',
             };
           }
           return field;
@@ -195,12 +198,15 @@ const ManageCategoriesScreen = (props: Props) => {
   };
 
   const onFieldDelete = (item: CategoryType, i: number) => {
-    const category = categoriesList.map((cat, i) => {
+    const category = categoriesList.map((cat, ind) => {
       if (item.Id == cat?.Id) {
-        const options = item.Fields.filter((item, index) => index != i);
-        return {...item, Fields: options};
+        const options = cat.Fields.filter((f, index) => index != i);
+        cat = {
+          ...cat,
+          Fields: options,
+        };
       }
-      return item;
+      return cat;
     });
     setCategoriesList(category);
   };
@@ -316,6 +322,7 @@ const ManageCategoriesScreen = (props: Props) => {
         {
           FieldName: '',
           FieldType: FieldTypes.TEXT,
+          FieldValue: null,
         },
       ],
       TitleField: 'Unnamed Field',

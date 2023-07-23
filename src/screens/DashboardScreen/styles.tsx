@@ -11,6 +11,15 @@ const styles = StyleSheet.create({
   subContainer: {
     flex: 1,
   },
+  emptyView: {
+    height: vh * 82,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    ...Fonts.Regular(14),
+  },
+
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
