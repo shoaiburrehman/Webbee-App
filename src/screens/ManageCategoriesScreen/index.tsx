@@ -39,6 +39,8 @@ type Props = {
 const ManageCategoriesScreen = (props: Props) => {
   const taskDetail = props?.route?.params?.taskDetail;
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openTitleFieldModel, setTitleFieldModal] = useState<boolean>(false);
+  const [titleFieldOptions, setTitleFieldOptions] = useState<object>();
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
   const [indexCategory, setIndexCategory] = useState<number | null>(null);
   const dispatch = useDispatch();
@@ -46,7 +48,6 @@ const ManageCategoriesScreen = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [isDate, setIsDate] = useState(false);
   let formatDate = dayjs(date).format('DD-MM-YYYY');
-  const [selectedLanguage, setSelectedLanguage] = useState('Add New Field');
   const options = [
     {
       label: 'Add New Field',
@@ -75,8 +76,6 @@ const ManageCategoriesScreen = (props: Props) => {
 
   useFocusEffect(
     useCallback(() => {
-      // Do something when the screen is focused
-
       return () => {
         dispatch(updateCategories(categoriesList));
       };
@@ -121,7 +120,6 @@ const ManageCategoriesScreen = (props: Props) => {
   const handleFieldsChange = (e: string, item: CategoryType, i: number) => {
     const category = categoriesList.map((cat, ind) => {
       if (item.Id == cat?.Id) {
-        console.log('item.Id: ', item.Id);
         const options = cat.Fields.map((field, index) => {
           if (index == i) {
             field = {
@@ -158,10 +156,25 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(categories);
   };
 
+  const onTitleFieldPress = (select: object) => {
+    const category = categoriesList.map((item, i) => {
+      if (item.Id == itemCategory?.Id) {
+        item = {
+          ...item,
+          TitleField: select.value,
+        };
+      }
+      return item;
+    });
+    setCategoriesList(category);
+    setIndexCategory(null);
+    setItemCategory(null);
+    setTitleFieldModal(!openTitleFieldModel);
+  };
+
   const onFieldTypePress = (select: object) => {
     const category = categoriesList.map((item, i) => {
       if (item.Id == itemCategory?.Id) {
-        // const options = field.options.filter((item, index) => item != value)
         const options = item.Fields.map((field, index) => {
           if (index == indexCategory) {
             field = {
@@ -192,7 +205,20 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(category);
   };
 
-  console.log('categoryList: ', categoriesList);
+  const handleOpenModal = (item: CategoryType) => {
+    setItemCategory(item);
+    let options = [];
+    item.Fields.map((cat, index) => {
+      let tempField = {
+        label: cat.FieldName,
+        value: cat.FieldName,
+      };
+      options.push(tempField);
+    });
+    setTitleFieldOptions(options);
+    setTitleFieldModal(!openTitleFieldModel);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View key={index} style={styles.fieldsView}>
@@ -236,6 +262,7 @@ const ManageCategoriesScreen = (props: Props) => {
             </>
           );
         })}
+
         <ModalViewWrapper
           openModal={openModal}
           setOpenModal={setOpenModal}
@@ -243,10 +270,16 @@ const ManageCategoriesScreen = (props: Props) => {
           onItemSelect={select => onFieldTypePress(select)}
         />
         <GeneralButton
-          text={'Title FIeld'}
+          text={`Title FIeld: ${item.TitleField}`}
           style={[styles.titleField]}
           textStyle={styles.btnText}
-          // onPress={handleCreate}
+          onPress={() => handleOpenModal(item)}
+        />
+        <ModalViewWrapper
+          openModal={openTitleFieldModel}
+          setOpenModal={setTitleFieldModal}
+          options={titleFieldOptions}
+          onItemSelect={select => onTitleFieldPress(select)}
         />
         <View style={styles.flexRow}>
           <TouchablePicker
@@ -287,7 +320,6 @@ const ManageCategoriesScreen = (props: Props) => {
       ],
       TitleField: 'Unnamed Field',
     };
-    // dispatch(addCategories(Category));
     setCategoriesList(prev => [...prev, Category]);
   };
 

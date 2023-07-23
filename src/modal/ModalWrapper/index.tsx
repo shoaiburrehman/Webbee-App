@@ -33,15 +33,16 @@ const ModalViewWrapper = (props: ModalProps) => {
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
         <View style={styles.modalView}>
-          {props?.options.map((item, index) => {
-            return (
-              <TouchableOpacity
-                style={[styles.touchableModalItem]}
-                onPress={() => props?.onItemSelect(item)}>
-                <Text style={styles.touchableModalText}>{item.label}</Text>
-              </TouchableOpacity>
-            );
-          })}
+          {props?.options &&
+            props?.options.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  style={[styles.touchableModalItem]}
+                  onPress={() => props?.onItemSelect(item)}>
+                  <Text style={styles.touchableModalText}>{item.label}</Text>
+                </TouchableOpacity>
+              );
+            })}
         </View>
       </View>
     </Modal>
