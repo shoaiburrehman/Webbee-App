@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, Text} from 'react-native';
+import {View, Image, TouchableOpacity, Text, KeyboardType} from 'react-native';
 import styles from './styles';
 import {vw} from '../../themes/units';
 import TextInputHOC from '../TextInputHOC';
 import {icons} from '../../assets';
+import {FieldTypes} from '../../constants/categoriesConstants';
 
 interface Props {
   style: {};
@@ -11,11 +12,12 @@ interface Props {
   secureTextEntry: boolean;
   notRequired: boolean;
   title: string;
+  keyboardType: KeyboardType;
   titleTextStyle: {};
   textInputContainer: {};
   textInputStyle: {};
   icon: any;
-  fieldType: 'string';
+  fieldType: FieldTypes;
   placeholder: string;
 }
 
@@ -60,7 +62,7 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
           />
           {props?.fieldType && (
             <TouchableOpacity style={styles.fieldTypeView} activeOpacity={0.8}>
-              <Text style={styles.fieldType}>TEXT</Text>
+              <Text style={styles.fieldType}>{props?.fieldType}</Text>
             </TouchableOpacity>
           )}
         </View>

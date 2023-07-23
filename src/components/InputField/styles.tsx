@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   fieldTypeView: {
     marginTop: vh * 2,
-    width: vw * 12,
+    paddingHorizontal: vw,
     alignItems: 'center',
     alignSelf: 'flex-start',
     justifyContent: 'center',

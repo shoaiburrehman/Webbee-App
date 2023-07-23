@@ -51,19 +51,19 @@ const ManageCategoriesScreen = (props: Props) => {
     },
     {
       label: 'Text',
-      value: 'Text',
+      value: 'TEXT',
     },
     {
-      label: 'String',
-      value: 'String',
+      label: 'Date',
+      value: 'DATE',
     },
     {
       label: 'Checkbox',
-      value: 'Checkbox',
+      value: 'CHECKBOX',
     },
     {
       label: 'Number',
-      value: 'Number',
+      value: 'NUMBER',
     },
   ];
 
@@ -124,6 +124,23 @@ const ManageCategoriesScreen = (props: Props) => {
     // });
   };
 
+  const handleAddField = (item: CategoryType, type: FieldTypes) => {
+    const categories = categoriesList.map((cat, index) => {
+      if (item.Id == cat.Id) {
+        let field = {
+          FieldName: '',
+          FieldType: type,
+        };
+        cat = {
+          ...cat,
+          Fields: [...cat.Fields, field],
+        };
+      }
+      return cat;
+    });
+    setCategoriesList(categories);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View key={index} style={styles.fieldsView}>
@@ -149,14 +166,19 @@ const ManageCategoriesScreen = (props: Props) => {
         /> */}
         {item.Fields.map((field, i) => {
           return (
-            <InputField
-              title="Field"
-              placeholder="Enter Field"
-              value={field.FieldName}
-              fieldType={field.FieldType}
-              icon={true}
-              onChangeText={e => handleFieldsChange(e, item, field)}
-            />
+            <>
+              <InputField
+                title="Field"
+                placeholder="Enter Field"
+                keyboardType={
+                  field.FieldType == FieldTypes.NUMBER ? 'numeric' : 'text'
+                }
+                value={field.FieldName}
+                fieldType={field.FieldType}
+                icon={true}
+                onChangeText={e => handleFieldsChange(e, item, field)}
+              />
+            </>
           );
         })}
         <GeneralButton
@@ -170,7 +192,9 @@ const ManageCategoriesScreen = (props: Props) => {
             options={options}
             mode={'dialog'}
             selectedValue={'Add New Field'}
-            onValueChange={(itemValue, itemIndex) => console.log(itemValue)}
+            onValueChange={(itemValue, itemIndex) =>
+              handleAddField(item, itemValue)
+            }
             dropdownIconColor={Colors.PRIMARY_COLOR}
             style={styles.picker}
           />
