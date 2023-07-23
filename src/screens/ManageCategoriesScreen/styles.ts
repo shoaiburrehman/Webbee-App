@@ -69,6 +69,10 @@ const styles = StyleSheet.create({
     marginHorizontal: vw * 7,
     marginVertical: 3 * vh,
   },
+  categoryHead: {
+    ...Fonts.Medium(20),
+    marginBottom: vh * 2,
+  },
   textInputStyle: {
     height: vh * 17,
   },

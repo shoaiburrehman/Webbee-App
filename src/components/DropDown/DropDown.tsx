@@ -138,7 +138,7 @@ const styles = StyleSheet.create<any>({
     borderTopWidth: 0,
     borderRadius: 5,
     zIndex: 99,
-    backgroundColor: Colors.DROPDOWN_BACKGROUND,
+    backgroundColor: Colors.PRIMARY_COLOR,
     marginHorizontal: vw * 12,
   },
   content: {

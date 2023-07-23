@@ -55,15 +55,16 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
             ]}
           />
           {props?.fieldType && (
-            <View style={styles.fieldTypeView}>
+            <TouchableOpacity style={styles.fieldTypeView} activeOpacity={0.8}>
               <Text style={styles.fieldType}>TEXT</Text>
-            </View>
+            </TouchableOpacity>
           )}
         </View>
         {props.icon && (
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={handleIconPress}>
+            onPress={handleIconPress}
+            activeOpacity={0.8}>
             <Image
               source={icons.delete}
               style={styles.icon}

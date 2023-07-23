@@ -54,9 +54,9 @@ export const TouchableInput = (props: Props) => {
             {props?.value ? props?.value : props?.placeholder}
           </Text>
           {props?.fieldType && (
-            <View style={styles.fieldTypeView}>
+            <TouchableOpacity style={styles.fieldTypeView} activeOpacity={0.8}>
               <Text style={styles.fieldType}>TEXT</Text>
-            </View>
+            </TouchableOpacity>
           )}
         </TouchableOpacity>
         {props.icon && (

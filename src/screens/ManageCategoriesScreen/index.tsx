@@ -39,6 +39,7 @@ const ManageCategoriesScreen = (props: Props) => {
   const renderFields = () => {
     return (
       <View style={styles.fieldsView}>
+        <Text style={styles.categoryHead}>New Category</Text>
         <InputField
           title="Category Name"
           placeholder="Enter Category Name"
