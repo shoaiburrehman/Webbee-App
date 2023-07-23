@@ -50,8 +50,8 @@ const InputField = React.forwardRef((props: Props, ref: Ref) => {
         ]}>
         <View style={[styles.textInputContainer, props?.textInputContainer]}>
           <TextInputHOC
-            {...props}
             ref={ref}
+            {...props}
             style={[
               styles.textInput,
               {width: getInputWidth()},

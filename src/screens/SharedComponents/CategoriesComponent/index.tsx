@@ -1,23 +1,14 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  Platform,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {View, Image, Text, TouchableOpacity} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
 import dayjs from 'dayjs';
 import styles from './styles';
-import {useTypedSelector} from '../../redux/useTypedSelected';
-import TouchablePicker from '../../components/TouchablePicker';
-import GeneralButton from '../../components/GeneralButton';
-import InputField from '../../components/InputField';
-import {Colors} from '../../themes/Colors';
-import {icons} from '../../assets';
+import TouchablePicker from '../../../components/TouchablePicker';
+import GeneralButton from '../../../components/GeneralButton';
+import InputField from '../../../components/InputField';
+import {Colors} from '../../../themes/Colors';
+import {icons} from '../../../assets';
 
 type Props = {
   navigation: any;
@@ -35,7 +26,6 @@ const ManageCategoriesScreen = (props: Props) => {
   const generalModalRef = useRef<any>();
   const setStatusRef = useRef<any>();
   let formatDate = dayjs(date).format('DD-MM-YYYY');
-  const [selectedLanguage, setSelectedLanguage] = useState('Add New Field');
   const options = [
     {
       label: 'Add New Field',
@@ -58,15 +48,16 @@ const ManageCategoriesScreen = (props: Props) => {
       value: 'Number',
     },
   ];
+  const [selectedLanguage, setSelectedLanguage] = useState('Add New Field');
 
-  const categoriesList = useTypedSelector(state => state.categories.categories);
-
-  const renderEmptyComponent = () => {
-    return (
-      <View style={styles.emptyView}>
-        <Text style={styles.emptyText}>No Categories Added</Text>
-      </View>
-    );
+  const handleOnAccept = () => {
+    if (taskDetail) {
+      props.navigation.goBack();
+    } else {
+      setTitle('');
+      setDescription('');
+      props?.navigation.navigate('HomeNavigator');
+    }
   };
 
   const renderFields = () => {
@@ -140,10 +131,7 @@ const ManageCategoriesScreen = (props: Props) => {
         extraHeight={100}
         extraScrollHeight={100}
         showsVerticalScrollIndicator={false}>
-        <FlatList
-          data={categoriesList}
-          ListEmptyComponent={renderEmptyComponent}
-        />
+        {renderFields()}
       </KeyboardAwareScrollView>
       <GeneralButton
         text={'Add Category'}
