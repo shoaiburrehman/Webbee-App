@@ -127,6 +127,42 @@ const DashboardScreen = (props: Props) => {
     dispatch(updateCategories(category));
   };
 
+  const handleFieldsChange = (
+    e: string,
+    itemCat: CategoryType,
+    i: number,
+    indexField: number,
+  ) => {
+    const category = categoriesList.map((cat, inde) => {
+      if (itemCat.Id == cat?.Id) {
+        const cateField = cat.Data.map((field, index) => {
+          if (index == indexField) {
+            const options = field?.item.map((inp, ind) => {
+              if (ind == i) {
+                inp = {
+                  ...inp,
+                  FieldValue: e,
+                };
+              }
+              return inp;
+            });
+            field = {
+              ...field,
+              item: options,
+            };
+          }
+          return field;
+        });
+        cat = {
+          ...cat,
+          Data: cateField,
+        };
+      }
+      return cat;
+    });
+    setCategoriesList(category);
+  };
+
   const renderFields = ({item, index}: renderPropType) => {
     return (
       <View style={styles.fieldsView}>
@@ -145,7 +181,6 @@ const DashboardScreen = (props: Props) => {
               return (
                 <View style={{marginBottom: vh * 2}}>
                   {field?.item.map((input, i) => {
-                    console.log('input:', input);
                     return (
                       <>
                         {input.FieldType === FieldTypes.CHECKBOX ? (
@@ -157,15 +192,17 @@ const DashboardScreen = (props: Props) => {
                               onValueChange={() => setSwitchValue(!switchValue)}
                               value={switchValue}
                             />
-                            <Text style={styles.switchText}>Does it work</Text>
+                            <Text style={styles.switchText}>
+                              {input.FieldName}
+                            </Text>
                           </View>
                         ) : input.FieldType === FieldTypes.DATE ? (
                           <TouchableInput
-                            title="Deadline"
-                            placeholder="Select Deadline"
+                            title={input.FieldName}
+                            placeholder={`Select ${input.FieldName}`}
                             value={
-                              taskDetail?.deadline && !isDate
-                                ? taskDetail?.deadline
+                              input.FieldValue && !isDate
+                                ? input.FieldValue
                                 : formatDate
                                 ? formatDate
                                 : null
@@ -174,10 +211,17 @@ const DashboardScreen = (props: Props) => {
                           />
                         ) : (
                           <InputField
-                            title="Title"
-                            placeholder="Enter Title"
-                            value={title}
-                            onChangeText={setTitle}
+                            title={input.FieldName}
+                            placeholder={`Enter ${input.FieldName}`}
+                            keyboardType={
+                              input.FieldType === FieldTypes.NUMBER
+                                ? 'numeric'
+                                : 'default'
+                            }
+                            value={input.FieldValue}
+                            onChangeText={e =>
+                              handleFieldsChange(e, item, i, ind)
+                            }
                           />
                         )}
                       </>
