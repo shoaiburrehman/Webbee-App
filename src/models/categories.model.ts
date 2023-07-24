@@ -1,26 +1,19 @@
-import {Dayjs} from 'dayjs';
 import {FieldTypes} from '../constants/categoriesConstants';
+
+export type CategoryFieldType = {
+  FieldName: string;
+  FieldType: FieldTypes;
+  FieldValue: string | number | Date | boolean | null;
+};
 
 export type CategoryType = {
   Id: number;
   CategoryName: string;
-  Fields: [
-    {
-      FieldName: string;
-      FieldType: FieldTypes;
-      FieldValue: string | number | Date | boolean | null;
-    },
-  ];
+  Fields: CategoryFieldType[];
   TitleField: string;
   Data: [
     {
-      item: [
-        {
-          FieldName: string;
-          FieldType: FieldTypes;
-          FieldValue: string | number | Date | boolean | null;
-        },
-      ];
+      item: CategoryFieldType[];
     }?,
   ];
 };

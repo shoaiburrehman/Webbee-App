@@ -25,7 +25,10 @@ import {useTypedSelector} from '../../redux/useTypedSelected';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {updateCategories} from '../../redux/reducers/categories.slice';
-import {CategoryType} from '../../models/categories.model';
+import {CategoryFieldType, CategoryType} from '../../models/categories.model';
+import {FieldTypes} from '../../constants/categoriesConstants';
+import dayjs from 'dayjs';
+import {vh} from '../../themes/units';
 
 type Props = {
   navigation: any;
@@ -42,6 +45,7 @@ const DashboardScreen = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [switchValue, setSwitchValue] = useState<boolean>(false);
   const [isDate, setIsDate] = useState(false);
+  let formatDate = dayjs(date).format('DD-MM-YYYY');
 
   const categories = useTypedSelector(state => state.categories.categories);
   const [categoriesList, setCategoriesList] = useState(categories);
@@ -49,10 +53,18 @@ const DashboardScreen = (props: Props) => {
   useFocusEffect(
     useCallback(() => {
       if (categories?.length != 0) {
+        console.warn('UPDATE CATEGORIESLIST');
         setCategoriesList(categories);
       }
     }, [categories]),
   );
+
+  // useEffect(() => {
+  //   if (categoriesList.length > 0) {
+  //     console.warn('UPDATE CATEGORY: ', categoriesList[0].Data);
+  //     dispatch(updateCategories(categoriesList));
+  //   }
+  // }, [categoriesList]);
 
   const renderEmptyComponent = (text: string) => {
     return (
@@ -69,8 +81,8 @@ const DashboardScreen = (props: Props) => {
 
   const handleAddNewItem = (item: CategoryType) => {
     const category = [...categoriesList];
-    category.forEach(cat => {
-      const data = []; // Initialize the data array inside the forEach loop for each category
+    category.map(cat => {
+      const data = []; // Initialize the data array inside the map for each category
 
       cat.Fields.forEach(field => {
         let temp = {
@@ -81,12 +93,38 @@ const DashboardScreen = (props: Props) => {
         data.push(temp);
       });
 
-      cat.Data = [{item: data}]; // Reassign the Data property with the new item array
+      if (cat.Data.length > 0) {
+        cat.Data.push({
+          item: data,
+        });
+      } else {
+        cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
+      }
       console.log('cat: ', cat);
       return cat;
     });
 
-    console.log(category);
+    setCategoriesList(category);
+    dispatch(updateCategories(category));
+  };
+
+  const handleRemoveItem = (
+    item: CategoryType,
+    field: CategoryFieldType,
+    i: number,
+  ) => {
+    const category = categoriesList.map((cat, ind) => {
+      if (item.Id == cat?.Id) {
+        const options = cat.Data.filter((_, index) => index != i);
+        cat = {
+          ...cat,
+          Data: options,
+        };
+      }
+      return cat;
+    });
+    setCategoriesList(category);
+    dispatch(updateCategories(category));
   };
 
   const renderFields = ({item, index}: renderPropType) => {
@@ -105,27 +143,49 @@ const DashboardScreen = (props: Props) => {
           <>
             {item.Data.map((field, ind) => {
               return (
-                <>
-                  <InputField
-                    title="Title"
-                    placeholder="Enter Title"
-                    value={title}
-                    onChangeText={setTitle}
-                  />
-                  <View style={[styles.touchable, styles.switchView]}>
-                    <Switch
-                      trackColor={Colors.PRIMARY_COLOR}
-                      thumbColor={Colors.WHITE}
-                      ios_backgroundColor={Colors.PLACE_HOLDER}
-                      onValueChange={() => setSwitchValue(!switchValue)}
-                      value={switchValue}
-                    />
-                    <Text style={styles.switchText}>Does it work</Text>
-                  </View>
+                <View style={{marginBottom: vh * 2}}>
+                  {field?.item.map((input, i) => {
+                    console.log('input:', input);
+                    return (
+                      <>
+                        {input.FieldType === FieldTypes.CHECKBOX ? (
+                          <View style={[styles.touchable, styles.switchView]}>
+                            <Switch
+                              trackColor={Colors.PRIMARY_COLOR}
+                              thumbColor={Colors.WHITE}
+                              ios_backgroundColor={Colors.PLACE_HOLDER}
+                              onValueChange={() => setSwitchValue(!switchValue)}
+                              value={switchValue}
+                            />
+                            <Text style={styles.switchText}>Does it work</Text>
+                          </View>
+                        ) : input.FieldType === FieldTypes.DATE ? (
+                          <TouchableInput
+                            title="Deadline"
+                            placeholder="Select Deadline"
+                            value={
+                              taskDetail?.deadline && !isDate
+                                ? taskDetail?.deadline
+                                : formatDate
+                                ? formatDate
+                                : null
+                            }
+                            onPress={() => setOpen(true)}
+                          />
+                        ) : (
+                          <InputField
+                            title="Title"
+                            placeholder="Enter Title"
+                            value={title}
+                            onChangeText={setTitle}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
                   <TouchableOpacity
                     style={styles.touchable}
-                    // onPress={handleIconPress}
-                  >
+                    onPress={() => handleRemoveItem(item, field, ind)}>
                     <Image
                       source={icons.delete}
                       style={styles.icon}
@@ -133,7 +193,7 @@ const DashboardScreen = (props: Props) => {
                     />
                     <Text style={styles.removeText}>Remove</Text>
                   </TouchableOpacity>
-                </>
+                </View>
               );
             })}
           </>
@@ -160,7 +220,9 @@ const DashboardScreen = (props: Props) => {
     );
   };
 
-  console.log('categoriesList: ', categoriesList);
+  console.log('categoriesList: ', categoriesList[0].Data);
+  console.log('categories: ', categories[0].Data);
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView

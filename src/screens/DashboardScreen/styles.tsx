@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: vw,
+    marginTop: vh,
   },
   icon: {
     height: vh * 4,

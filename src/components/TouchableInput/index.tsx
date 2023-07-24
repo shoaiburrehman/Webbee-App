@@ -40,7 +40,7 @@ export const TouchableInput = (props: Props) => {
           {props?.title}
         </Text>
       )}
-      <View style={[styles.flex, {width: props.icon ? '82%' : '90%'}]}>
+      <View style={[styles.flex, {width: props.icon ? '90%' : '100%'}]}>
         <TouchableOpacity
           style={[styles.textInputContainer, props?.textInputContainer]}
           activeOpacity={0.9}
