@@ -45,6 +45,10 @@ const DashboardScreen = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [switchValue, setSwitchValue] = useState<boolean>(false);
   const [isDate, setIsDate] = useState(false);
+  const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
+  const [indexField, setIndexField] = useState<number | null>(null);
+  const [indexInput, setIndexPut] = useState<number | null>(null);
+
   let formatDate = dayjs(date).format('DD-MM-YYYY');
 
   const categories = useTypedSelector(state => state.categories.categories);
@@ -54,7 +58,7 @@ const DashboardScreen = (props: Props) => {
     useCallback(() => {
       if (categories?.length != 0) {
         console.warn('UPDATE CATEGORIESLIST');
-        setCategoriesList(categories);
+        setTimeout(() => setCategoriesList(categories), 1000);
       }
     }, [categories]),
   );
@@ -80,30 +84,35 @@ const DashboardScreen = (props: Props) => {
   };
 
   const handleAddNewItem = (item: CategoryType) => {
-    const category = [...categoriesList];
-    category.map(cat => {
-      const data = []; // Initialize the data array inside the map for each category
-
-      cat.Fields.forEach(field => {
-        let temp = {
-          FieldName: field.FieldName,
-          FieldType: field.FieldType,
-          FieldValue: '',
-        };
-        data.push(temp);
-      });
-
-      if (cat.Data.length > 0) {
-        cat.Data.push({
-          item: data,
+    // const category = [...categoriesList];
+    const category = categoriesList.map(cat => {
+      if (cat.Id === item.Id) {
+        const data = []; // Initialize the data array inside the map for each category
+        cat.Fields.forEach(field => {
+          let temp = {
+            FieldName: field.FieldName,
+            FieldType: field.FieldType,
+            FieldValue: field.FieldType == FieldTypes.CHECKBOX ? false : '',
+          };
+          data.push(temp);
         });
-      } else {
-        cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
+
+        if (cat.Data.length > 0) {
+          cat = {
+            ...cat,
+            Data: [
+              ...cat.Data,
+              {
+                item: data,
+              },
+            ],
+          };
+        } else {
+          cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
+        }
       }
-      console.log('cat: ', cat);
       return cat;
     });
-
     setCategoriesList(category);
     dispatch(updateCategories(category));
   };
@@ -161,6 +170,62 @@ const DashboardScreen = (props: Props) => {
       return cat;
     });
     setCategoriesList(category);
+    if (typeof e === 'boolean') {
+      dispatch(updateCategories(category));
+    }
+  };
+
+  const handleAddDate = (date: string) => {
+    const category = categoriesList.map((cat, inde) => {
+      if (itemCategory?.Id == cat?.Id) {
+        const cateField = cat.Data.map((field, index) => {
+          if (index == indexField) {
+            const options = field?.item.map((inp, ind) => {
+              if (ind == indexInput) {
+                inp = {
+                  ...inp,
+                  FieldValue: dayjs(date).format('DD-MM-YYYY'),
+                };
+              }
+              return inp;
+            });
+            field = {
+              ...field,
+              item: options,
+            };
+          }
+          return field;
+        });
+        cat = {
+          ...cat,
+          Data: cateField,
+        };
+      }
+      return cat;
+    });
+    setCategoriesList(category);
+    dispatch(updateCategories(category));
+    setItemCategory(null);
+    setIndexPut(null);
+    setIndexField(null);
+    setOpen(false);
+  };
+
+  const handleOpenDateModal = (
+    item: CategoryType,
+    inputIndex: number,
+    fieldIndex: number,
+  ) => {
+    setItemCategory(item);
+    setIndexPut(inputIndex);
+    setIndexField(fieldIndex);
+    setOpen(true);
+  };
+
+  const handleOnBlurInput = (val: number | string) => {
+    if (val !== '') {
+      dispatch(updateCategories(categoriesList));
+    }
   };
 
   const renderFields = ({item, index}: renderPropType) => {
@@ -189,26 +254,29 @@ const DashboardScreen = (props: Props) => {
                               trackColor={Colors.PRIMARY_COLOR}
                               thumbColor={Colors.WHITE}
                               ios_backgroundColor={Colors.PLACE_HOLDER}
-                              onValueChange={() => setSwitchValue(!switchValue)}
-                              value={switchValue}
+                              onValueChange={() =>
+                                handleFieldsChange(
+                                  !input.FieldValue,
+                                  item,
+                                  i,
+                                  ind,
+                                )
+                              }
+                              value={input.FieldValue}
                             />
                             <Text style={styles.switchText}>
                               {input.FieldName}
                             </Text>
                           </View>
                         ) : input.FieldType === FieldTypes.DATE ? (
-                          <TouchableInput
-                            title={input.FieldName}
-                            placeholder={`Select ${input.FieldName}`}
-                            value={
-                              input.FieldValue && !isDate
-                                ? input.FieldValue
-                                : formatDate
-                                ? formatDate
-                                : null
-                            }
-                            onPress={() => setOpen(true)}
-                          />
+                          <>
+                            <TouchableInput
+                              title={input.FieldName}
+                              placeholder={`Select ${input.FieldName}`}
+                              value={input.FieldValue}
+                              onPress={() => handleOpenDateModal(item, i, ind)}
+                            />
+                          </>
                         ) : (
                           <InputField
                             title={input.FieldName}
@@ -219,6 +287,7 @@ const DashboardScreen = (props: Props) => {
                                 : 'default'
                             }
                             value={input.FieldValue}
+                            onBlur={() => handleOnBlurInput(input.FieldValue)}
                             onChangeText={e =>
                               handleFieldsChange(e, item, i, ind)
                             }
@@ -227,16 +296,18 @@ const DashboardScreen = (props: Props) => {
                       </>
                     );
                   })}
-                  <TouchableOpacity
-                    style={styles.touchable}
-                    onPress={() => handleRemoveItem(item, field, ind)}>
-                    <Image
-                      source={icons.delete}
-                      style={styles.icon}
-                      resizeMode="contain"
-                    />
-                    <Text style={styles.removeText}>Remove</Text>
-                  </TouchableOpacity>
+                  {ind > 0 && (
+                    <TouchableOpacity
+                      style={styles.touchable}
+                      onPress={() => handleRemoveItem(item, field, ind)}>
+                      <Image
+                        source={icons.delete}
+                        style={styles.icon}
+                        resizeMode="contain"
+                      />
+                      <Text style={styles.removeText}>Remove</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               );
             })}
@@ -264,9 +335,6 @@ const DashboardScreen = (props: Props) => {
     );
   };
 
-  console.log('categoriesList: ', categoriesList[0].Data);
-  console.log('categories: ', categories[0].Data);
-
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -292,8 +360,7 @@ const DashboardScreen = (props: Props) => {
         minimumDate={new Date()}
         onConfirm={date => {
           setOpen(false);
-          setIsDate(true);
-          setDate(date);
+          handleAddDate(date);
         }}
         onCancel={() => {
           setOpen(false);
