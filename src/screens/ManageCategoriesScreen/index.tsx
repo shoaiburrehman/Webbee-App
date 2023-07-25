@@ -1,20 +1,7 @@
 import React, {useEffect, useState, useRef, useCallback} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  Platform,
-  TouchableOpacity,
-  FlatList,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import debounce from 'lodash.debounce';
+import {View, Image, Text, TouchableOpacity, FlatList} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import DatePicker from 'react-native-date-picker';
-import {Picker} from '@react-native-picker/picker';
 import {useDispatch} from 'react-redux';
-import dayjs from 'dayjs';
 import styles from './styles';
 import {useTypedSelector} from '../../redux/useTypedSelected';
 import TouchablePicker from '../../components/TouchablePicker';
@@ -37,17 +24,13 @@ type Props = {
 };
 
 const ManageCategoriesScreen = (props: Props) => {
-  const taskDetail = props?.route?.params?.taskDetail;
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openTitleFieldModel, setTitleFieldModal] = useState<boolean>(false);
   const [titleFieldOptions, setTitleFieldOptions] = useState<object>();
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
   const [indexCategory, setIndexCategory] = useState<number | null>(null);
   const dispatch = useDispatch();
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const [isDate, setIsDate] = useState(false);
-  let formatDate = dayjs(date).format('DD-MM-YYYY');
+
   const options = [
     {
       label: 'Add New Field',
@@ -236,18 +219,6 @@ const ManageCategoriesScreen = (props: Props) => {
           onChangeText={e => handleChange('CategoryName', e, item)}
           textInputContainer={{width: '90%'}}
         />
-        {/* <TouchableInput
-          title="Deadline"
-          placeholder="Select Deadline"
-          value={
-            taskDetail?.deadline && !isDate
-              ? taskDetail?.deadline
-              : formatDate
-              ? formatDate
-              : null
-          }
-          onPress={() => setOpen(true)}
-        /> */}
         {item.Fields.map((field, i) => {
           return (
             <>
@@ -351,21 +322,6 @@ const ManageCategoriesScreen = (props: Props) => {
         style={[styles.btn]}
         textStyle={styles.btnText}
         onPress={handleAddCategory}
-      />
-      <DatePicker
-        modal
-        mode={'date'}
-        open={open}
-        date={date}
-        minimumDate={new Date()}
-        onConfirm={date => {
-          setOpen(false);
-          setIsDate(true);
-          setDate(date);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
       />
     </View>
   );

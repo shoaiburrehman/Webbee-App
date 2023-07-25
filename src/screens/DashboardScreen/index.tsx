@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   Image,
@@ -36,21 +30,12 @@ type Props = {
 };
 
 const DashboardScreen = (props: Props) => {
-  const taskDetail = props?.route?.params?.taskDetail;
   const dispatch = useDispatch();
-  const [title, setTitle] = useState(taskDetail?.title || '');
-  const [description, setDescription] = useState(taskDetail?.description || '');
-  const [status, setStatus] = useState(taskDetail?.status || '');
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [switchValue, setSwitchValue] = useState<boolean>(false);
-  const [isDate, setIsDate] = useState(false);
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
   const [indexField, setIndexField] = useState<number | null>(null);
   const [indexInput, setIndexPut] = useState<number | null>(null);
-
-  let formatDate = dayjs(date).format('DD-MM-YYYY');
-
   const categories = useTypedSelector(state => state.categories.categories);
   const [categoriesList, setCategoriesList] = useState(categories);
 
@@ -357,7 +342,6 @@ const DashboardScreen = (props: Props) => {
         mode={'date'}
         open={open}
         date={date}
-        minimumDate={new Date()}
         onConfirm={date => {
           setOpen(false);
           handleAddDate(date);
