@@ -82,19 +82,19 @@ const DashboardScreen = (props: Props) => {
           data.push(temp);
         });
 
-        if (cat.Data.length > 0) {
-          cat = {
-            ...cat,
-            Data: [
-              ...cat.Data,
-              {
-                item: data,
-              },
-            ],
-          };
-        } else {
-          cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
-        }
+        // if (cat.Data.length > 0) {
+        cat = {
+          ...cat,
+          Data: [
+            ...cat.Data,
+            {
+              item: data,
+            },
+          ],
+        };
+        // } else {
+        //   cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
+        // }
       }
       return cat;
     });
@@ -281,18 +281,18 @@ const DashboardScreen = (props: Props) => {
                       </>
                     );
                   })}
-                  {ind > 0 && (
-                    <TouchableOpacity
-                      style={styles.touchable}
-                      onPress={() => handleRemoveItem(item, field, ind)}>
-                      <Image
-                        source={icons.delete}
-                        style={styles.icon}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.removeText}>Remove</Text>
-                    </TouchableOpacity>
-                  )}
+                  {/* {ind > 0 && ( */}
+                  <TouchableOpacity
+                    style={styles.touchable}
+                    onPress={() => handleRemoveItem(item, field, ind)}>
+                    <Image
+                      source={icons.delete}
+                      style={styles.icon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.removeText}>Remove</Text>
+                  </TouchableOpacity>
+                  {/* )} */}
                 </View>
               );
             })}
