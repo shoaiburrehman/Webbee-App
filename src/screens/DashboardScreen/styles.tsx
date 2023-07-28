@@ -30,9 +30,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: vh,
+    width: '100%',
   },
   categoryHead: {
     ...Fonts.Medium(20),
+  },
+  addCategories: {
+    paddingHorizontal: vw * 5,
+    height: vh * 5,
+    borderRadius: vw * 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.PRIMARY_COLOR,
+    marginTop: vh * 2,
   },
   addNewItem: {
     paddingHorizontal: vw * 5,

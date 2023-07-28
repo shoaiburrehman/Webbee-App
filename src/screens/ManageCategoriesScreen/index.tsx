@@ -59,10 +59,10 @@ const ManageCategoriesScreen = (props: Props) => {
 
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        dispatch(updateCategories(categoriesList));
-      };
-    }, [categoriesList]),
+      if (categories?.length != 0) {
+        setTimeout(() => setCategoriesList(categories), 1000);
+      }
+    }, [categories]),
   );
 
   const renderEmptyComponent = () => {
@@ -95,9 +95,18 @@ const ManageCategoriesScreen = (props: Props) => {
     setCategoriesList(categories);
   };
 
+  const handleOnBlurInput = (val: number | string) => {
+    if (val !== '') {
+      dispatch(updateCategories(categoriesList));
+    }
+  };
+
   const handleDeleteCategory = (item: CategoryType) => {
-    let cateories = categoriesList.filter((cat, index) => cat.Id !== item?.Id);
-    setCategoriesList(cateories);
+    let categoriesData = categoriesList.filter(
+      (cat, index) => cat.Id !== item?.Id,
+    );
+    setCategoriesList(categoriesData);
+    dispatch(updateCategories(categoriesData));
   };
 
   const handleFieldsChange = (e: string, item: CategoryType, i: number) => {
@@ -120,7 +129,33 @@ const ManageCategoriesScreen = (props: Props) => {
       }
       return cat;
     });
-    setCategoriesList(category);
+
+    let categoryData = category.map((cat, indexCat) => {
+      if (item.Id == cat?.Id) {
+        if (cat.Data.length != 0) {
+          const tempData = cat.Data.map((field, index) => {
+            const tempItem = field?.item.map((inp, ind) => {
+              if (ind == i) {
+                inp = {
+                  ...inp,
+                  FieldName: e,
+                };
+              }
+              return inp;
+            });
+            field = {
+              ...field,
+              item: tempItem,
+            };
+            return field;
+          });
+          return {...cat, Data: tempData};
+        }
+      }
+      return cat;
+    });
+
+    setCategoriesList(categoryData);
   };
 
   const handleAddField = (item: CategoryType, type: FieldTypes) => {
@@ -129,16 +164,29 @@ const ManageCategoriesScreen = (props: Props) => {
         let field = {
           FieldName: '',
           FieldType: type,
-          FieldValue: null,
+          FieldValue: '',
         };
+
+        let tempField: any[] = [];
+        if (cat.Data.length != 0) {
+          tempField = cat.Data.map((dataItem, index) => {
+            dataItem = {
+              ...dataItem,
+              item: [...dataItem?.item, field],
+            };
+            return dataItem;
+          });
+        }
         cat = {
           ...cat,
+          Data: tempField,
           Fields: [...cat.Fields, field],
         };
       }
       return cat;
     });
     setCategoriesList(categories);
+    dispatch(updateCategories(categories));
   };
 
   const onTitleFieldPress = (select: object) => {
@@ -152,6 +200,7 @@ const ManageCategoriesScreen = (props: Props) => {
       return item;
     });
     setCategoriesList(category);
+    dispatch(updateCategories(category));
     setIndexCategory(null);
     setItemCategory(null);
     setTitleFieldModal(!openTitleFieldModel);
@@ -165,16 +214,43 @@ const ManageCategoriesScreen = (props: Props) => {
             field = {
               ...field,
               FieldType: select.value,
-              // FieldName: '',
             };
           }
           return field;
         });
+
         return {...item, Fields: options};
       }
       return item;
     });
-    setCategoriesList(category);
+
+    let categoryData = category.map((item, i) => {
+      if (item.Id == itemCategory?.Id) {
+        if (item.Data.length != 0) {
+          const tempData = item.Data.map((field, index) => {
+            const tempItem = field?.item.map((inp, ind) => {
+              if (ind == indexCategory) {
+                inp = {
+                  ...inp,
+                  FieldType: select.value,
+                };
+              }
+              return inp;
+            });
+            field = {
+              ...field,
+              item: tempItem,
+            };
+            return field;
+          });
+          return {...item, Data: tempData};
+        }
+      }
+      return item;
+    });
+    setCategoriesList(categoryData);
+    dispatch(updateCategories(categoryData));
+
     setIndexCategory(null);
     setItemCategory(null);
     setOpenModal(!openModal);
@@ -184,14 +260,25 @@ const ManageCategoriesScreen = (props: Props) => {
     const category = categoriesList.map((cat, ind) => {
       if (item.Id == cat?.Id) {
         const options = cat.Fields.filter((f, index) => index != i);
+        let fieldsData: any[] = [];
+        const filteredData = cat.Data.map(field => {
+          fieldsData = field?.item.filter((f, index) => index != i);
+          field = {
+            ...field,
+            item: fieldsData,
+          };
+          return field;
+        });
         cat = {
           ...cat,
+          Data: filteredData,
           Fields: options,
         };
       }
       return cat;
     });
     setCategoriesList(category);
+    dispatch(updateCategories(category));
   };
 
   const handleOpenModal = (item: CategoryType) => {
@@ -217,6 +304,7 @@ const ManageCategoriesScreen = (props: Props) => {
           placeholder="Enter Category Name"
           value={item.CategoryName}
           onChangeText={e => handleChange('CategoryName', e, item)}
+          onBlur={() => handleOnBlurInput(item.CategoryName)}
           textInputContainer={{width: '90%'}}
         />
         {item.Fields.map((field, i) => {
@@ -235,6 +323,7 @@ const ManageCategoriesScreen = (props: Props) => {
                   setIndexCategory(i);
                 }}
                 onChangeText={e => handleFieldsChange(e, item, i)}
+                onBlur={() => handleOnBlurInput(field.FieldName)}
               />
             </>
           );
@@ -300,6 +389,8 @@ const ManageCategoriesScreen = (props: Props) => {
       Data: [],
     };
     setCategoriesList(prev => [...prev, Category]);
+    let cat = [...categories, Category];
+    dispatch(updateCategories(cat));
   };
 
   return (

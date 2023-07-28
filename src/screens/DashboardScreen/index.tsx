@@ -23,6 +23,7 @@ import {CategoryFieldType, CategoryType} from '../../models/categories.model';
 import {FieldTypes} from '../../constants/categoriesConstants';
 import dayjs from 'dayjs';
 import {vh} from '../../themes/units';
+import NavigationRoutes from '../../navigations/NavigationRoutes';
 
 type Props = {
   navigation: any;
@@ -41,24 +42,26 @@ const DashboardScreen = (props: Props) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (categories?.length != 0) {
-        console.warn('UPDATE CATEGORIESLIST');
+      if (categories) {
         setTimeout(() => setCategoriesList(categories), 1000);
       }
     }, [categories]),
   );
 
-  // useEffect(() => {
-  //   if (categoriesList.length > 0) {
-  //     console.warn('UPDATE CATEGORY: ', categoriesList[0].Data);
-  //     dispatch(updateCategories(categoriesList));
-  //   }
-  // }, [categoriesList]);
+  const navigateToCategories = () => {
+    props?.navigation.navigate(NavigationRoutes.MANAGE_CATEGORY);
+  };
 
   const renderEmptyComponent = (text: string) => {
     return (
       <View style={styles.emptyView}>
         <Text style={styles.emptyText}>{text}</Text>
+        <GeneralButton
+          text={'Add Categories'}
+          style={[styles.addCategories]}
+          textStyle={styles.addNewItemTxt}
+          onPress={navigateToCategories}
+        />
       </View>
     );
   };
@@ -233,7 +236,7 @@ const DashboardScreen = (props: Props) => {
                   {field?.item.map((input, i) => {
                     return (
                       <>
-                        {input.FieldType === FieldTypes.CHECKBOX ? (
+                        {input?.FieldType === FieldTypes.CHECKBOX ? (
                           <View style={[styles.touchable, styles.switchView]}>
                             <Switch
                               trackColor={Colors.PRIMARY_COLOR}
@@ -253,7 +256,7 @@ const DashboardScreen = (props: Props) => {
                               {input.FieldName}
                             </Text>
                           </View>
-                        ) : input.FieldType === FieldTypes.DATE ? (
+                        ) : input?.FieldType === FieldTypes.DATE ? (
                           <>
                             <TouchableInput
                               title={input.FieldName}
