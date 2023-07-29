@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
   subContainer: {
     flex: 1,
   },
+  itemContainer: {
+    width: '88%',
+  },
   emptyView: {
     height: vh * 82,
     justifyContent: 'center',

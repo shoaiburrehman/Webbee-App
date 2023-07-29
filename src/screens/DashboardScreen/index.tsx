@@ -32,6 +32,7 @@ type Props = {
 
 const DashboardScreen = (props: Props) => {
   const dispatch = useDispatch();
+  const CategoryItem: CategoryType = props?.route.params?.item;
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
@@ -331,14 +332,20 @@ const DashboardScreen = (props: Props) => {
         extraHeight={100}
         extraScrollHeight={100}
         showsVerticalScrollIndicator={false}>
-        <FlatList
-          data={categoriesList}
-          keyExtractor={index => index?.toString()}
-          ListEmptyComponent={() =>
-            renderEmptyComponent('No Categories Found on Dashboard')
-          }
-          renderItem={(item, index) => renderFields(item, index)}
-        />
+        {CategoryItem ? (
+          <View style={styles.itemContainer}>
+            {renderFields({item: CategoryItem, index: 0})}
+          </View>
+        ) : (
+          <FlatList
+            data={categoriesList}
+            keyExtractor={index => index?.toString()}
+            ListEmptyComponent={() =>
+              renderEmptyComponent('No Categories Found on Dashboard')
+            }
+            renderItem={(item, index) => renderFields(item, index)}
+          />
+        )}
       </KeyboardAwareScrollView>
       <DatePicker
         modal

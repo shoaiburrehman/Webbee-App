@@ -5,8 +5,17 @@ import {drawerRoutes} from '../../../navigations/NavigationOptions';
 import {vh, vw} from '../../../themes/units';
 import {Colors} from '../../../themes/Colors';
 
-const DrawerButton = props => {
-  const routeConfigs = drawerRoutes[props.routeName];
+type propTypes = {
+  index?: number;
+  onPress: (val: string) => void;
+  routeName: string;
+};
+
+const DrawerButton = (props: propTypes) => {
+  const routeConfigs = drawerRoutes[props.routeName] || {
+    label: props?.routeName,
+  };
+
   return (
     <TouchableOpacity
       onPress={() => props.onPress(props.routeName)}
@@ -15,6 +24,7 @@ const DrawerButton = props => {
     </TouchableOpacity>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
