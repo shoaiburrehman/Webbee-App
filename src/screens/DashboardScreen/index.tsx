@@ -33,13 +33,14 @@ type Props = {
 const DashboardScreen = (props: Props) => {
   const dispatch = useDispatch();
   const CategoryItem: CategoryType = props?.route.params?.item;
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date>(new Date());
+  const [open, setOpen] = useState<boolean>(false);
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
   const [indexField, setIndexField] = useState<number | null>(null);
   const [indexInput, setIndexPut] = useState<number | null>(null);
   const categories = useTypedSelector(state => state.categories.categories);
-  const [categoriesList, setCategoriesList] = useState(categories);
+  const [categoriesList, setCategoriesList] =
+    useState<CategoryType[]>(categories);
 
   useFocusEffect(
     useCallback(() => {
