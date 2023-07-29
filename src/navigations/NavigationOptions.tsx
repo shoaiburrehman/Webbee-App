@@ -5,7 +5,7 @@ import {icons} from '../assets/index';
 import {vh, vw} from '../themes/units';
 import {Colors} from '../themes/Colors';
 
-const navigationOptions = navProps => {
+const navigationOptions = (navProps: any) => {
   return {
     headerTitle: () => getTitle(navProps),
     headerLeft: () => renderHeaderLeft(navProps),
@@ -17,7 +17,7 @@ const navigationOptions = navProps => {
   };
 };
 
-const getHeaderStyle = props => {
+const getHeaderStyle = (props: any) => {
   return {
     shadowColor: 'transparent',
     backgroundColor: Colors.PRIMARY_COLOR,
@@ -28,10 +28,13 @@ const getHeaderStyle = props => {
   };
 };
 
-const getTitle = props => {
+const getTitle = (props: any) => {
+  const categoryName: string = props?.route?.params?.item?.CategoryName;
   return (
     <View style={styles.logoView}>
-      <Text style={styles.titleTextStyle}>{props?.route?.name}</Text>
+      <Text style={styles.titleTextStyle}>
+        {categoryName ? categoryName : props?.route?.name}
+      </Text>
     </View>
   );
 };
@@ -45,7 +48,7 @@ export const drawerRoutes = {
   },
 };
 
-const renderHeaderLeft = props => {
+const renderHeaderLeft = (props: any) => {
   return (
     <TouchableOpacity
       onPress={() => props?.navigation.toggleDrawer()}
