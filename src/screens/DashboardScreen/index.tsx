@@ -24,6 +24,12 @@ import {FieldTypes} from '../../constants/categoriesConstants';
 import dayjs from 'dayjs';
 import {vh} from '../../themes/units';
 import NavigationRoutes from '../../navigations/NavigationRoutes';
+import {
+  _handleAddCategoryFunc,
+  _handleAddDateFunc,
+  _handleDeleteCategoryFunc,
+  _handleFieldChange,
+} from '../../Utils/categoryUtils';
 
 type Props = {
   navigation: any;
@@ -32,7 +38,7 @@ type Props = {
 
 const DashboardScreen = (props: Props) => {
   const dispatch = useDispatch();
-  const CategoryItem: CategoryType = props?.route.params?.item;
+  const catItem: CategoryType = props?.route.params?.item;
   const [date, setDate] = useState<Date>(new Date());
   const [open, setOpen] = useState<boolean>(false);
   const [itemCategory, setItemCategory] = useState<CategoryType | null>(null);
@@ -41,6 +47,7 @@ const DashboardScreen = (props: Props) => {
   const categories = useTypedSelector(state => state.categories.categories);
   const [categoriesList, setCategoriesList] =
     useState<CategoryType[]>(categories);
+  const [CategoryItem, setCategoryItem] = useState<CategoryType>(catItem);
 
   useFocusEffect(
     useCallback(() => {
@@ -48,6 +55,12 @@ const DashboardScreen = (props: Props) => {
         setTimeout(() => setCategoriesList(categories), 1000);
       }
     }, [categories]),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setCategoryItem(catItem);
+    }, [catItem]),
   );
 
   const navigateToCategories = () => {
@@ -74,32 +87,14 @@ const DashboardScreen = (props: Props) => {
   };
 
   const handleAddNewItem = (item: CategoryType) => {
-    // const category = [...categoriesList];
+    if (CategoryItem) {
+      let category = item;
+      category = _handleAddCategoryFunc(category);
+      setCategoryItem(category);
+    }
     const category = categoriesList.map(cat => {
       if (cat.Id === item.Id) {
-        const data = []; // Initialize the data array inside the map for each category
-        cat.Fields.forEach(field => {
-          let temp = {
-            FieldName: field.FieldName,
-            FieldType: field.FieldType,
-            FieldValue: field.FieldType == FieldTypes.CHECKBOX ? false : '',
-          };
-          data.push(temp);
-        });
-
-        // if (cat.Data.length > 0) {
-        cat = {
-          ...cat,
-          Data: [
-            ...cat.Data,
-            {
-              item: data,
-            },
-          ],
-        };
-        // } else {
-        //   cat.Data = [{item: data}]; // Reassign the Data property with the new item array for the first time
-        // }
+        cat = _handleAddCategoryFunc(cat);
       }
       return cat;
     });
@@ -107,18 +102,16 @@ const DashboardScreen = (props: Props) => {
     dispatch(updateCategories(category));
   };
 
-  const handleRemoveItem = (
-    item: CategoryType,
-    field: CategoryFieldType,
-    i: number,
-  ) => {
+  const handleRemoveItem = (item: CategoryType, i: number) => {
+    if (CategoryItem) {
+      let category = item;
+      category = _handleDeleteCategoryFunc(category, i);
+      setCategoryItem(category);
+    }
+
     const category = categoriesList.map((cat, ind) => {
       if (item.Id == cat?.Id) {
-        const options = cat.Data.filter((_, index) => index != i);
-        cat = {
-          ...cat,
-          Data: options,
-        };
+        cat = _handleDeleteCategoryFunc(cat, i);
       }
       return cat;
     });
@@ -132,30 +125,15 @@ const DashboardScreen = (props: Props) => {
     i: number,
     indexField: number,
   ) => {
+    if (CategoryItem) {
+      let category = itemCat;
+      category = _handleFieldChange(category, e, indexField, i);
+      setCategoryItem(category);
+    }
+
     const category = categoriesList.map((cat, inde) => {
       if (itemCat.Id == cat?.Id) {
-        const cateField = cat.Data.map((field, index) => {
-          if (index == indexField) {
-            const options = field?.item.map((inp, ind) => {
-              if (ind == i) {
-                inp = {
-                  ...inp,
-                  FieldValue: e,
-                };
-              }
-              return inp;
-            });
-            field = {
-              ...field,
-              item: options,
-            };
-          }
-          return field;
-        });
-        cat = {
-          ...cat,
-          Data: cateField,
-        };
+        cat = _handleFieldChange(cat, e, indexField, i);
       }
       return cat;
     });
@@ -166,30 +144,15 @@ const DashboardScreen = (props: Props) => {
   };
 
   const handleAddDate = (date: string) => {
+    if (CategoryItem) {
+      let category = CategoryItem;
+      category = _handleAddDateFunc(category, indexField, indexInput, date);
+      setCategoryItem(category);
+    }
+
     const category = categoriesList.map((cat, inde) => {
       if (itemCategory?.Id == cat?.Id) {
-        const cateField = cat.Data.map((field, index) => {
-          if (index == indexField) {
-            const options = field?.item.map((inp, ind) => {
-              if (ind == indexInput) {
-                inp = {
-                  ...inp,
-                  FieldValue: dayjs(date).format('DD-MM-YYYY'),
-                };
-              }
-              return inp;
-            });
-            field = {
-              ...field,
-              item: options,
-            };
-          }
-          return field;
-        });
-        cat = {
-          ...cat,
-          Data: cateField,
-        };
+        cat = _handleAddDateFunc(cat, indexField, indexInput, date);
       }
       return cat;
     });
@@ -289,7 +252,7 @@ const DashboardScreen = (props: Props) => {
                   {/* {ind > 0 && ( */}
                   <TouchableOpacity
                     style={styles.touchable}
-                    onPress={() => handleRemoveItem(item, field, ind)}>
+                    onPress={() => handleRemoveItem(item, ind)}>
                     <Image
                       source={icons.delete}
                       style={styles.icon}
@@ -309,18 +272,6 @@ const DashboardScreen = (props: Props) => {
             </Text>
           </View>
         )}
-        {/* <TouchableInput
-          title="Deadline"
-          placeholder="Select Deadline"
-          value={
-            taskDetail?.deadline && !isDate
-              ? taskDetail?.deadline
-              : formatDate
-              ? formatDate
-              : null
-          }
-          onPress={() => setOpen(true)}
-        /> */}
       </View>
     );
   };
@@ -340,7 +291,7 @@ const DashboardScreen = (props: Props) => {
         ) : (
           <FlatList
             data={categoriesList}
-            keyExtractor={index => index?.toString()}
+            keyExtractor={item => item.Id?.toString()}
             ListEmptyComponent={() =>
               renderEmptyComponent('No Categories Found on Dashboard')
             }

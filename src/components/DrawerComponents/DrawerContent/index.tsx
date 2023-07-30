@@ -36,7 +36,7 @@ const DrawerContent = (props: any) => {
               onPress={() =>
                 handleOnDrawerItemPress(NavigationRoutes.DASHBOARD, item)
               }
-              routeName={item.CategoryName}
+              routeName={item?.CategoryName}
             />
           );
         })}
