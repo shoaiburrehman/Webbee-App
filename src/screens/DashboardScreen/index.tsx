@@ -183,7 +183,7 @@ const DashboardScreen = (props: Props) => {
 
   const renderFields = ({item, index}: renderPropType) => {
     return (
-      <View style={styles.fieldsView}>
+      <View style={styles.fieldsView} key={index}>
         <View style={styles.flexRow}>
           <Text style={styles.categoryHead}>{item.CategoryName}</Text>
           <GeneralButton
@@ -197,7 +197,7 @@ const DashboardScreen = (props: Props) => {
           <>
             {item.Data.map((field, ind) => {
               return (
-                <View style={{marginBottom: vh * 2}}>
+                <View style={{marginBottom: vh * 2}} key={ind}>
                   {field?.item.map((input, i) => {
                     return (
                       <>

@@ -309,7 +309,7 @@ const ManageCategoriesScreen = (props: Props) => {
         />
         {item.Fields.map((field, i) => {
           return (
-            <>
+            <View key={i}>
               <InputField
                 title={field.FieldName !== '' ? field.FieldName : 'Field Name'}
                 placeholder="Enter Field Name"
@@ -325,7 +325,7 @@ const ManageCategoriesScreen = (props: Props) => {
                 onChangeText={e => handleFieldsChange(e, item, i)}
                 onBlur={() => handleOnBlurInput(field.FieldName)}
               />
-            </>
+            </View>
           );
         })}
 
@@ -403,7 +403,7 @@ const ManageCategoriesScreen = (props: Props) => {
         showsVerticalScrollIndicator={false}>
         <FlatList
           data={categoriesList}
-          keyExtractor={index => index?.toString()}
+          keyExtractor={(item, index) => String(item.Id)}
           ListEmptyComponent={renderEmptyComponent}
           renderItem={(item, index) => renderFields(item, index)}
         />
